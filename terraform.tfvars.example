@@ -1,0 +1,9 @@
+project_name = {
+  QE   = "demo-Project"
+  prod = "demo-Project"
+}
+
+org_id = {
+  QE   = "value"
+  prod = "value"
+}
