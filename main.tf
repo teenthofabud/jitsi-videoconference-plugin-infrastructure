@@ -18,8 +18,8 @@ resource "null_resource" "bitwarden_output" {
 
   provisioner "local-exec" {
     command = <<EOT
-echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" >> bitwarden_output.json
-terraform output -json >> bitwarden_output.json
+echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" >> output.json
+terraform output -json >> output.json
 EOT
   }
 }
