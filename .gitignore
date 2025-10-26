@@ -4,3 +4,4 @@ output.json
 *.tfstate.backup
 *.tfstate
 *.lock.hcl
+terraform.tfstate.d
