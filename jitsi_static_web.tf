@@ -34,7 +34,7 @@ module "jitsi_static_web" {
 
 resource "aws_s3_bucket_policy" "website_policy" {
   bucket = module.jitsi_static_web.bucket_id
-  policy = templatefile("${path.module}/modules/aws/policies/static_web_pub_access.json.tpl", {
+  policy = templatefile("${path.module}/modules/aws/policies/jitsi_static_web_pub_access.json.tpl", {
     bucket_arn = module.jitsi_static_web.bucket_arn
   })
 
