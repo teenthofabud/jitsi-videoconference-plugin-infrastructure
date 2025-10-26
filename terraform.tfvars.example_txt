@@ -1,0 +1,66 @@
+# ----      Bitwarden      ---- #
+project_name = {
+  qe   = "<value>"
+  prod = "<value>"
+}
+
+org_id = {
+  qe   = "value"
+  prod = "value"
+}
+
+# ----      AWS    ---- #
+aws_region = {
+  qe   = "<value>"
+  prod = "<value>"
+}
+# ----      <value>    ---- #
+force_destroy_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+enable_versioning_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+enable_website_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+enable_public_read_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+prevent_destroy_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+create_before_destroy_jitsi_static_web = {
+  qe   = <value>
+  prod = <value>
+}
+
+ignore_changes_jitsi_static_web = {
+  qe   = []
+  prod = []
+}
+
+index_document_jitsi_static_web = {
+  qe   = "<value>"
+  prod = "<value>"
+}
+
+error_document_jitsi_static_web = {
+  qe   = "<value>"
+  prod = "<value>"
+}
+
+tags_jitsi_static_web = {
+  project   = "<value>"
+  component = "<value>"
+}
