@@ -1,7 +1,7 @@
 #----      Bitwarden      ---- #
-# output "Bitwarden_project_name" {
-#   value = module.jitsi_project.project_name
-# }
+output "Bitwarden_project_name" {
+  value = module.jitsi_project.project_name
+}
 
 
 #----      Jitsi S3 web      ---- #
