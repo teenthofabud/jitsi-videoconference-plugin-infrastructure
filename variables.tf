@@ -53,3 +53,26 @@ variable "tags_jitsi_static_web" {
   description = "A map of tags to assign to the resource."
   type        = map(string)
 }
+
+
+##    jitsi_vpc_subnet    ##
+
+variable "jitsi_vpc_cidr" {
+  description = "value"
+  type        = map(string)
+}
+
+variable "jitsi_vpc_tag" {
+  description = "value"
+  type        = map(string)
+}
+
+variable "jutsi_subnet_cidr" {
+  description = "value"
+  type        = map(string)
+}
+
+variable "jitsi_subnet_tags" {
+  description = "value"
+  type        = map(string)
+}

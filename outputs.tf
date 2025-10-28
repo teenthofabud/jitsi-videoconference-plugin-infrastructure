@@ -1,10 +1,10 @@
-# ----      Bitwarden      ---- #
-# output "Bitwarden_project-name" {
-#   value = module.jitsi-project.project_name
+#----      Bitwarden      ---- #
+# output "Bitwarden_project_name" {
+#   value = module.jitsi_project.project_name
 # }
 
 
-# ----      S3 Backend      ---- #
+#----      Jitsi S3 web      ---- #
 output "bucket_id_for_static_web" {
   description = "value of static_web the bucket id"
   value       = module.jitsi_static_web.bucket_id
@@ -20,3 +20,14 @@ output "static_web_endpoint" {
   value       = module.jitsi_static_web.website_endpoint
 
 }
+
+# ----      Jitsi VPC      ---- #
+
+output "jitsi_vpc_id" {
+  description = "ID FOR JITSI VPC"
+  value       = module.jitsi_vps.vpc_id
+}
+output "jitsi_subnet_id" {
+  description = "ID FOR JITSI SUBNET"
+  value       = module.jitsi_subnet.subnet_id
+} 
