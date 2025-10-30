@@ -67,12 +67,29 @@ variable "jitsi_vpc_tag" {
   type        = map(string)
 }
 
-variable "jutsi_subnet_cidr" {
+variable "jitsi_subnet_cidr" {
   description = "value"
   type        = map(string)
 }
 
 variable "jitsi_subnet_tags" {
   description = "value"
+  type        = map(string)
+}
+
+##    jitsi_vpc_gateway_endpoint   ##
+
+variable "jitsi_gateway_endpoint_service_name" {
+  description = "The AWS gateway endpoint service name to connect to (e.g. s3)."
+  type        = map(string)
+}
+
+# variable "jitsi_endpoint_route_table_ids" {
+#   description = "List of route table IDs to associate with the gateway endpoint."
+#   type        = map(list(string))
+# }
+
+variable "jitsi_gateway_endpoint_tags" {
+  description = "Map of tags to assign to the gateway endpoint."
   type        = map(string)
 }
