@@ -93,3 +93,25 @@ variable "jitsi_gateway_endpoint_tags" {
   description = "Map of tags to assign to the gateway endpoint."
   type        = map(string)
 }
+
+variable "prevent_destroy_jitsi_static_web" {
+  description = "value"
+  type = map(bool)
+}
+
+variable "create_before_destroy_jitsi_static_web" {
+  description = "value"
+  type = map(bool)
+  
+}
+
+variable "ignore_changes_jitsi_static_web" {
+  description = "value"
+  type = map(bool)
+}
+
+variable "use_local_mock" {
+  type        = bool
+  default     = false
+  description = "Set to true to target local Floci container instead of real AWS"
+}

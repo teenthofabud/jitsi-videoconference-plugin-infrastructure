@@ -17,7 +17,25 @@ terraform {
 
 provider "bitwarden" {}
 
+
 provider "aws" {
-  # Configure your AWS region / credentials as usual (env vars, shared config, etc.)
-  region = lookup(var.aws_region, terraform.workspace)
+  region     = lookup(var.aws_region, terraform.workspace, "us-east-1")
+  access_key = var.use_local_mock ? "mock_key" : null
+  secret_key = var.use_local_mock ? "mock_secret" : null
+
+  skip_credentials_validation = var.use_local_mock
+  skip_metadata_api_check     = var.use_local_mock
+  skip_requesting_account_id  = false
+
+  # Dynamically switch endpoints based on your flag
+  dynamic "endpoints" {
+    for_each = var.use_local_mock ? [1] : []
+    content {
+      s3       = "http://localhost:4566"
+      iam      = "http://localhost:4566"
+      sts      = "http://localhost:4566"
+      ssm      = "http://localhost:4566"
+      dynamodb = "http://localhost:4566"
+    }
+  }
 }
