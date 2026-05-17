@@ -50,6 +50,9 @@ ignore_changes_jitsi_static_web = {
   prod = []
 }
 
+    "prettier.printWidth": 120,
+    "gitlens.ai.model": "vscode",
+    "g
 index_document_jitsi_static_web = {
   qe   = "<value>"
   prod = "<value>"

@@ -24,6 +24,7 @@ resource "aws_s3_bucket_website_configuration" "s3_bucket" {
   }
 }
 
+
 # Versioning (created only if enabled)
 resource "aws_s3_bucket_versioning" "s3_bucket" {
   count  = var.enable_versioning ? 1 : 0
