@@ -17,12 +17,13 @@ terraform {
 
 provider "bitwarden" {}
 
-
 provider "aws" {
   region     = lookup(var.aws_region, terraform.workspace, "us-east-1")
+  
+  # If local mocking using floci isn't needed, only region property
+  # has to be kept, everything else can be removed
   access_key = var.use_local_mock ? "mock_key" : null
   secret_key = var.use_local_mock ? "mock_secret" : null
-
   skip_credentials_validation = var.use_local_mock
   skip_metadata_api_check     = var.use_local_mock
   skip_requesting_account_id  = false

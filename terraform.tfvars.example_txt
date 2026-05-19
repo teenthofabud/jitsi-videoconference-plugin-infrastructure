@@ -1,69 +1,109 @@
-# ----      Bitwarden      ---- #
-project_name = {
-  qe   = "<value>"
-  prod = "<value>"
-}
+project_name = "jitsi"
+environment  = "dev"
+aws_region   = "us-east-1"
 
-org_id = {
-  qe   = "value"
-  prod = "value"
-}
+deployments = {
+  dev = {
+    us-east-1 = {
+      features = {
+        jitsi_web       = true
+        jitsi_vpc       = false
+        jitsi_bitwarden = false
+      }
 
-# ----      AWS    ---- #
-aws_region = {
-  qe   = "<value>"
-  prod = "<value>"
-}
-# ----      <value>    ---- #
-force_destroy_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+      jitsi_web = {
+        index_document        = "index.html"
+        error_document        = "error.html"
+        force_destroy         = true
+        enable_versioning     = false
+        enable_website        = true
+        enable_public_read    = true
+        prevent_destroy       = false
+        create_before_destroy = true
+        ignore_changes        = []
 
-enable_versioning_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+        tags = {
+          Component = "jitsi-web"
+        }
+      }
 
-enable_website_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+      jitsi_vpc = {
+        vpc = {
+          cidr = "10.0.0.0/16"
+          tag  = "jitsi-prod-vpc"
+        }
 
-enable_public_read_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+        subnet = {
+          cidr = "10.0.1.0/24"
+          tags = {
+            Component = "jitsi-subnet"
+          }
+        }
 
-prevent_destroy_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+        gateway_endpoint = {
+          service_name    = "s3"
+          route_table_ids = []
+          tags = {
+            Component = "jitsi-gateway-endpoint"
+          }
+        }
+      }
 
-create_before_destroy_jitsi_static_web = {
-  qe   = <value>
-  prod = <value>
-}
+      jitsi_bitwarden = {
+        org_id = "your-bitwarden-org-id"
+      }
+    }
+  }
 
-ignore_changes_jitsi_static_web = {
-  qe   = []
-  prod = []
-}
+  prod = {
+    us-east-1 = {
+      features = {
+        jitsi_web       = true
+        jitsi_vpc       = true
+        jitsi_bitwarden = true
+      }
 
-    "prettier.printWidth": 120,
-    "gitlens.ai.model": "vscode",
-    "g
-index_document_jitsi_static_web = {
-  qe   = "<value>"
-  prod = "<value>"
-}
+      jitsi_web = {
+        index_document        = "index.html"
+        error_document        = "error.html"
+        force_destroy         = false
+        enable_versioning     = true
+        enable_website        = true
+        enable_public_read    = false
+        prevent_destroy       = true
+        create_before_destroy = true
+        ignore_changes        = []
 
-error_document_jitsi_static_web = {
-  qe   = "<value>"
-  prod = "<value>"
-}
+        tags = {
+          Component = "jitsi-web"
+        }
+      }
 
-tags_jitsi_static_web = {
-  project   = "<value>"
-  component = "<value>"
+      jitsi_vpc = {
+        vpc = {
+          cidr = "10.0.0.0/16"
+          tag  = "jitsi-prod-vpc"
+        }
+
+        subnet = {
+          cidr = "10.0.1.0/24"
+          tags = {
+            Component = "jitsi-subnet"
+          }
+        }
+
+        gateway_endpoint = {
+          service_name    = "s3"
+          route_table_ids = []
+          tags = {
+            Component = "jitsi-gateway-endpoint"
+          }
+        }
+      }
+
+      jitsi_bitwarden = {
+        org_id = "your-bitwarden-org-id"
+      }
+    }
+  }
 }
