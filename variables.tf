@@ -38,13 +38,13 @@ variable "deployments" {
       tags                   = map(string)
       prevent_destroy        = bool
       create_before_destroy  = bool
-      ignore_changes         = optional(list(string), [])
+      ignore_changes         = bool
     }))
 
     jitsi_vpc = optional(object({
       vpc = object({
         cidr = string
-        tag  = string
+        tags  = map(string)
       })
 
       subnet = object({

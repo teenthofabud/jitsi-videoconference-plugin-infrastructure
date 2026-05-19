@@ -1,7 +1,7 @@
 module "jitsi_vps" {
   source   = "../../modules/aws/vpc"
   vpc_cidr = var.config.vpc.cidr
-  vpc_tags = var.config.vpc.tag
+  vpc_tags = var.config.vpc.tags
 }
 
 # Find the VPC main route table when there's no explicit subnet association

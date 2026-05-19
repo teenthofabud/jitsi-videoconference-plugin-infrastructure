@@ -1,14 +1,14 @@
 project_name = "jitsi"
 environment  = "dev"
 aws_region   = "us-east-1"
-
+use_local_mock = true
 deployments = {
   dev = {
     us-east-1 = {
       features = {
         jitsi_web       = true
-        jitsi_vpc       = false
-        jitsi_bitwarden = false
+        jitsi_vpc       = true
+        jitsi_bitwarden = true
       }
 
       jitsi_web = {
@@ -20,7 +20,7 @@ deployments = {
         enable_public_read    = true
         prevent_destroy       = false
         create_before_destroy = true
-        ignore_changes        = []
+        ignore_changes        = false
 
         tags = {
           Component = "jitsi-web"
@@ -30,7 +30,9 @@ deployments = {
       jitsi_vpc = {
         vpc = {
           cidr = "10.0.0.0/16"
-          tag  = "jitsi-prod-vpc"
+          tags  = {
+            Component = "jitsi-prod-vpc"
+          }
         }
 
         subnet = {
@@ -72,7 +74,7 @@ deployments = {
         enable_public_read    = false
         prevent_destroy       = true
         create_before_destroy = true
-        ignore_changes        = []
+        ignore_changes        = false
 
         tags = {
           Component = "jitsi-web"
@@ -82,7 +84,9 @@ deployments = {
       jitsi_vpc = {
         vpc = {
           cidr = "10.0.0.0/16"
-          tag  = "jitsi-prod-vpc"
+          tags  = {
+            Component = "jitsi-prod-vpc"
+          }
         }
 
         subnet = {
