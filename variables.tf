@@ -13,6 +13,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "use_local_mock" {
+  description = "Whether to locally mock aws using floci"
+  type        = bool
+}
+
 variable "deployments" {
   description = "Environment and region specific deployment configuration."
 
