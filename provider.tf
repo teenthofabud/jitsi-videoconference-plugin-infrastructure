@@ -18,7 +18,7 @@ terraform {
 provider "bitwarden" {}
 
 provider "aws" {
-  region     = lookup(var.aws_region, terraform.workspace, "us-east-1")
+  region     = var.aws_region
   
   # If local mocking using floci isn't needed, only region property
   # has to be kept, everything else can be removed
