@@ -15,7 +15,8 @@ terraform {
   required_version = ">= 1.1.0"
 }
 
-provider "bitwarden" {}
+# provider "bitwarden" {
+# }
 
 provider "aws" {
   region     = var.aws_region
@@ -26,7 +27,7 @@ provider "aws" {
   secret_key = var.use_local_mock ? "mock_secret" : null
   skip_credentials_validation = var.use_local_mock
   skip_metadata_api_check     = var.use_local_mock
-  skip_requesting_account_id  = false
+  skip_requesting_account_id  = var.use_local_mock
 
   # Dynamically switch endpoints based on your flag
   dynamic "endpoints" {
