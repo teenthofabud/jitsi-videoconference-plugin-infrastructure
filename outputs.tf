@@ -36,10 +36,3 @@ output "jitsi_vpc_gateway_endpoint_id" {
   description = "ID of the Jitsi VPC gateway endpoint."
   value       = try(module.jitsi_vpc[0].jitsi_vpc_gateway_endpoint_id, null)
 }
-
-# ---- Bitwarden ----
-
-output "bitwarden_project_name" {
-  description = "Name of the Bitwarden project."
-  value       = try(module.jitsi_bitwarden[0].bitwarden_project_name, null)
-}

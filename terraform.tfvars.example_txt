@@ -8,7 +8,6 @@ deployments = {
       features = {
         jitsi_web       = true
         jitsi_vpc       = true
-        jitsi_bitwarden = true
       }
 
       jitsi_web = {
@@ -50,10 +49,6 @@ deployments = {
           }
         }
       }
-
-      jitsi_bitwarden = {
-        org_id = "your-bitwarden-org-id"
-      }
     }
   }
 
@@ -62,7 +57,6 @@ deployments = {
       features = {
         jitsi_web       = true
         jitsi_vpc       = true
-        jitsi_bitwarden = true
       }
 
       jitsi_web = {
@@ -103,10 +97,6 @@ deployments = {
             Component = "jitsi-gateway-endpoint"
           }
         }
-      }
-
-      jitsi_bitwarden = {
-        org_id = "your-bitwarden-org-id"
       }
     }
   }

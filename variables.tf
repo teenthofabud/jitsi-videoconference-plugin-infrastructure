@@ -25,7 +25,6 @@ variable "deployments" {
     features = object({
       jitsi_web       = bool
       jitsi_vpc       = bool
-      jitsi_bitwarden = bool
     })
 
     jitsi_web = optional(object({
@@ -57,10 +56,6 @@ variable "deployments" {
         route_table_ids = list(string)
         tags            = map(string)
       })
-    }))
-
-    jitsi_bitwarden = optional(object({
-      org_id = string
     }))
   })))
 }
