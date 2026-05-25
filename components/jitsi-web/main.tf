@@ -1,11 +1,23 @@
-# Generate a random suffix for the bucket name to ensure uniqueness
-resource "random_uuid" "static_web_suffix" {
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+# S3 bucket name for the Jitsi web static site; using regional namespace
+locals {
+  bucket_name_prefix = lower(replace(
+    "${var.context.project_name}-web-${var.context.environment}",
+    "_",
+    "-"
+  ))
+
+  bucket_name = format(
+    "%s-%s-%s-an",
+    local.bucket_name_prefix,
+    data.aws_caller_identity.current.account_id,
+    data.aws_region.current.region
+  )
 }
 
-# Build a globally unique S3 bucket name for the Jitsi web static site.
-locals {
-  bucket_name = "${var.context.project_name}-${var.context.environment}-${random_uuid.static_web_suffix.result}"
-}
 
 # Create the S3 bucket using the reusable S3 static website module.
 module "jitsi_static_web" {

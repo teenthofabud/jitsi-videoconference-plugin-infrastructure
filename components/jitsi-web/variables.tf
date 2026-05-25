@@ -18,8 +18,5 @@ variable "config" {
     enable_website       = bool
     enable_public_read   = bool
     tags                 = map(string)
-    prevent_destroy      = bool
-    create_before_destroy = bool
-    ignore_changes = bool
   })
 }

@@ -17,10 +17,6 @@ deployments = {
         enable_versioning     = false
         enable_website        = true
         enable_public_read    = true
-        prevent_destroy       = false
-        create_before_destroy = true
-        ignore_changes        = false
-
         tags = {
           Component = "jitsi-web"
         }
@@ -66,10 +62,6 @@ deployments = {
         enable_versioning     = true
         enable_website        = true
         enable_public_read    = false
-        prevent_destroy       = true
-        create_before_destroy = true
-        ignore_changes        = false
-
         tags = {
           Component = "jitsi-web"
         }
