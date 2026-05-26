@@ -5,3 +5,4 @@ output.json
 *.lock.hcl
 terraform.tfstate.d
 .DS_Store
+.env

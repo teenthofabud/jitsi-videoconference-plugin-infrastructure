@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ -f ".env" ]]; then
+  set -a
+  source .env
+  set +a
+fi
+
 #local emulation using floci.io
 export AWS_ENDPOINT_URL=http://localhost:4566
 export AWS_DEFAULT_REGION=us-east-1

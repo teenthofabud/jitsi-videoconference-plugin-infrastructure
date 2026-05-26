@@ -64,14 +64,16 @@ variable "deployments" {
         dns_record_type              = optional(string, "CNAME")
         cloudflare_record_proxied    = optional(bool, true)
         cloudflare_record_ttl        = optional(number, 1)
-
-        page_rule_force_https_target   = string
         page_rule_force_https_priority = optional(number, 1)
-
-        page_rule_cache_all_target         = string
         page_rule_cache_all_cache_level    = string
         page_rule_cache_all_edge_cache_ttl = optional(number, 31536000)
         page_rule_cache_all_priority       = optional(number, 2)
+      })
+
+      rate_limit = object({
+        period = optional(number, 60)
+        requests_per_period = optional(number, 100)
+        mitigation_timeout = optional(number, 60)
       })
 
       unauthorized_port = object({

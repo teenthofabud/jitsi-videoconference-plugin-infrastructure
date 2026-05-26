@@ -5,5 +5,5 @@ data "cloudflare_zone" "domain" {
 }
 
 locals {
-  zone_id = data.cloudflare_zone.domain.id
+  zone_id = data.cloudflare_zone.domain.id  
 }

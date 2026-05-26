@@ -57,7 +57,7 @@ variable "page_rule_cache_all_cache_level" {
 variable "page_rule_cache_all_edge_cache_ttl" {
   description = "The edge cache TTL for the cache all page rule."
   type        = number
-  default     = 31536000
+  default     = 2419200 #4 weeks
 }
 
 variable "page_rule_cache_all_priority" {
@@ -76,4 +76,23 @@ variable "allowed_ports" {
 variable "block_locations" {
   type    = list(string)
   default = ["RU", "CN", "KP"]
+}
+
+## rate_limit
+variable "rate_limit_period" {
+  description = "Time window in seconds for Cloudflare rate limiting."
+  type        = number
+  default     = 60
+}
+
+variable "rate_limit_requests_per_period" {
+  description = "Number of requests allowed during the rate limit period."
+  type        = number
+  default     = 100
+}
+
+variable "rate_limit_mitigation_timeout" {
+  description = "Duration in seconds to apply mitigation after the rate limit is exceeded."
+  type        = number
+  default     = 60
 }
