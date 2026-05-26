@@ -1,5 +1,7 @@
 data "cloudflare_zone" "domain" {
-  name = var.domain_name
+  filter = {
+    name = var.domain_name
+  }
 }
 
 locals {

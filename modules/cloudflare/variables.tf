@@ -6,7 +6,7 @@ variable "domain_name" {
 
 variable "static_website_endpoint" {
   description = "s3 static website endpoint"
-  type = "string" 
+  type = string
 }
 
 variable "dns_record_name" {

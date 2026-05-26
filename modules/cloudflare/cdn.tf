@@ -1,8 +1,8 @@
 
-resource "cloudflare_record" "s3_cname" {
+resource "cloudflare_dns_record" "s3_cname" {
   zone_id = local.zone_id
   name    = var.dns_record_name
-  value   = var.static_website_endpoint
+  content   = var.static_website_endpoint
   type    = var.dns_record_type
   proxied = var.cloudflare_record_proxied
   ttl     = var.cloudflare_record_ttl
