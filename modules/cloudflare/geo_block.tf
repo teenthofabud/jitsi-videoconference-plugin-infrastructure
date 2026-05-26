@@ -1,5 +1,5 @@
 resource "cloudflare_ruleset" "geo_block" {
-  zone_id = "<YOUR_ZONE_ID>"
+  zone_id = local.zone_id
   name    = "Block traffic from selected countries"
   kind    = "zone"
   phase   = "http_request_firewall_custom"

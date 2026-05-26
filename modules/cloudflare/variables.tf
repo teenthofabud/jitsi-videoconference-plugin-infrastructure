@@ -1,6 +1,12 @@
+## cdn
 variable "domain_name" {
   description = "The domain name to be used with Cloudflare."
   type        = string
+}
+
+variable "static_website_endpoint" {
+  description = "s3 static website endpoint"
+  type = "string" 
 }
 
 variable "dns_record_name" {
@@ -31,6 +37,7 @@ variable "page_rule_force_https_target" {
   description = "The target URL pattern for the force HTTPS page rule."
   type        = string
 }
+
 variable "page_rule_force_https_priority" {
   description = "The priority of the force HTTPS page rule."
   type        = number
@@ -57,4 +64,16 @@ variable "page_rule_cache_all_priority" {
   description = "The priority of the cache all page rule."
   type        = number
   default     = 2
+}
+
+## unauthorized_port
+variable "allowed_ports" {
+  type    = list(number)
+  default = [80, 443]
+}
+
+## geo_block
+variable "block_locations" {
+  type    = list(string)
+  default = ["RU", "CN", "KP"]
 }

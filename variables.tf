@@ -25,6 +25,7 @@ variable "deployments" {
     features = object({
       jitsi_web       = bool
       jitsi_vpc       = bool
+      cloudflare      = bool
     })
 
     jitsi_web = optional(object({
@@ -54,5 +55,33 @@ variable "deployments" {
         tags            = map(string)
       })
     }))
+
+    cloudflare = optional(object({
+      domain_name = string
+
+      cdn = object({
+        dns_record_name              = optional(string, "www")
+        dns_record_type              = optional(string, "CNAME")
+        cloudflare_record_proxied    = optional(bool, true)
+        cloudflare_record_ttl        = optional(number, 1)
+
+        page_rule_force_https_target   = string
+        page_rule_force_https_priority = optional(number, 1)
+
+        page_rule_cache_all_target         = string
+        page_rule_cache_all_cache_level    = string
+        page_rule_cache_all_edge_cache_ttl = optional(number, 31536000)
+        page_rule_cache_all_priority       = optional(number, 2)
+      })
+
+      unauthorized_port = object({
+        allowed_ports = optional(list(number), [80, 443])
+      })
+
+      geo_block = object({
+        block_locations = optional(list(string), ["RU", "CN", "KP"])
+      })
+    }))
+
   })))
 }

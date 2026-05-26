@@ -7,7 +7,8 @@ deployments = {
     us-east-1 = {
       features = {
         jitsi_web       = true
-        jitsi_vpc       = true
+        jitsi_vpc       = false
+        cloudflare      = true
       }
 
       jitsi_web = {
@@ -45,6 +46,30 @@ deployments = {
           }
         }
       }
+
+      cloudflare = {
+        domain_name = "example.com"
+        cdn = {
+          dns_record_name            = "www"
+          dns_record_type            = "CNAME"
+          cloudflare_record_proxied  = true
+          cloudflare_record_ttl      = 1
+          page_rule_force_https_target   = "http://www.example.com/*"
+          page_rule_force_https_priority = 1
+          page_rule_cache_all_target         = "www.example.com/*"
+          page_rule_cache_all_cache_level    = "cache_everything"
+          page_rule_cache_all_edge_cache_ttl = 31536000
+          page_rule_cache_all_priority       = 2
+        }
+
+        unauthorized_port = {
+          allowed_ports = [80, 443]
+        }
+
+        geo_block = {
+          block_locations = ["RU", "CN", "KP"]
+        }
+      }
     }
   }
 
@@ -53,6 +78,7 @@ deployments = {
       features = {
         jitsi_web       = true
         jitsi_vpc       = true
+        cloudflare      = true
       }
 
       jitsi_web = {
@@ -88,6 +114,31 @@ deployments = {
           tags = {
             Component = "jitsi-gateway-endpoint"
           }
+        }
+      }
+
+
+      cloudflare = {
+        domain_name = "example.com"
+        cdn = {
+          dns_record_name            = "www"
+          dns_record_type            = "CNAME"
+          cloudflare_record_proxied  = true
+          cloudflare_record_ttl      = 1
+          page_rule_force_https_target   = "http://www.example.com/*"
+          page_rule_force_https_priority = 1
+          page_rule_cache_all_target         = "www.example.com/*"
+          page_rule_cache_all_cache_level    = "cache_everything"
+          page_rule_cache_all_edge_cache_ttl = 31536000
+          page_rule_cache_all_priority       = 2
+        }
+
+        unauthorized_port = {
+          allowed_ports = [80, 443]
+        }
+
+        geo_block = {
+          block_locations = ["RU", "CN", "KP"]
         }
       }
     }

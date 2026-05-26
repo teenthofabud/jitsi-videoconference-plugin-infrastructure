@@ -1,5 +1,5 @@
 resource "cloudflare_ruleset" "zone_rl" {
-  zone_id     = "<ZONE_ID>"
+  zone_id     = local.zone_id
   name        = "Rate limiting for my zone"
   description = ""
   kind        = "zone"
@@ -9,7 +9,8 @@ resource "cloudflare_ruleset" "zone_rl" {
     {
       ref         = "rate_limit_api_requests_ip"
       description = "Rate limit API requests by IP"
-      expression  = "(http.request.uri.path matches \"^/api/\")"
+      # expression  = "(http.request.uri.path matches \"^/api/\")"
+      expression = true
       action      = "block"
       ratelimit = {
         characteristics     = ["cf.colo.id", "ip.src"]
