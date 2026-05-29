@@ -6,3 +6,4 @@ output.json
 terraform.tfstate.d
 .DS_Store
 .env
+*.env
