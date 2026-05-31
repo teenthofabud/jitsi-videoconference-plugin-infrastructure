@@ -36,11 +36,7 @@ module "jitsi_gateway_endpoint" {
   gateway_endpoint_route_table_ids = [data.aws_route_table.subnet_rt.id] # var.config.gateway_endpoint.route_table_ids
   gateway_endpoint_tags = merge(
     var.context.common_tags,
-    var.config.gateway_endpoint.tags,
-    {
-      "CreatedBy"   = "terraform"
-      "Environment" = var.context.environment
-    }
+    var.config.gateway_endpoint.tags
   )
   depends_on = [module.jitsi_subnet]
 }

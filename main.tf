@@ -14,6 +14,14 @@ module "jitsi_vpc" {
   config  = local.deployment_config.jitsi_vpc
 }
 
+module "jitsi_iam"{
+  count = local.features.jitsi_iam ? 1 : 0
+  source = "./components/jitsi-iam"
+
+  context = local.context
+  config = local.deployment_config.jitsi_iam
+}
+
 module "cloudflare" {
   count  = local.features.cloudflare && local.features.jitsi_web ? 1 : 0
   source = "./modules/cloudflare"

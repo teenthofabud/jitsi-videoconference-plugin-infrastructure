@@ -26,6 +26,7 @@ variable "deployments" {
       jitsi_web       = bool
       jitsi_vpc       = bool
       cloudflare      = bool
+      jitsi_iam       = bool
     })
 
     jitsi_web = optional(object({
@@ -83,6 +84,16 @@ variable "deployments" {
       geo_block = object({
         block_locations = optional(list(string), ["RU", "CN", "KP"])
       })
+    }))
+
+    jitsi_iam = optional(object({
+      github_org = string
+      github_repo = string
+      github_branch = string
+      github_oidc_link                 = string
+      oidc_client_id_list              = list(string)
+      gh_actions_s3_deploy_role_name   = string
+      gh_actions_role_policy_name      = string
     }))
 
   })))
