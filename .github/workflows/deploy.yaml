@@ -18,5 +18,5 @@ jobs:
 
       - name: test bitwarden
         run: |
-          echo "key id : ${{ steps.secrets.AWS_ACCESS_KEY_ID }}"
-          echo "secret key : ${{ steps.secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "key id : ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}"
+          echo "secret key : ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}"
