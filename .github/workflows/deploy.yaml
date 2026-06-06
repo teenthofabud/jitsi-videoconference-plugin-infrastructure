@@ -15,12 +15,12 @@ jobs:
         id: secrets
         uses: bitwarden/sm-action@v3
         with:
-          access_token: ${{ secrets.SM_ACCESS_TOKEN }}
+          access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
-            e34f178e-c389-426a-8628-b46100ea531c > AWS_ACCESS_KEY_ID
-            9463a0e5-4e80-43ba-8c9e-b46100ea7ce7 > AWS_SECRET_ACCESS_KEY
+            63fca68c-453f-4a5f-886e-b461011893a7 > TEST_A
+            eb0c8662-aefd-40f3-bc91-b4610118780d > TEST_B
 
       - name: test bitwarden
         run: |
-          echo "key id : ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}"
-          echo "secret key : ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}"
+          echo "key id : ${{ steps.secrets.outputs.TEST_A }}"
+          echo "secret key : ${{ steps.secrets.outputs.TEST_B }}"
