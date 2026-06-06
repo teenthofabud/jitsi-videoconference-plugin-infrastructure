@@ -1,5 +1,7 @@
+name: Deploy Jitsi Resources to AWS
+
 on: 
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   deploy-to-aws:
