@@ -1,10 +1,10 @@
 project_name = "jitsi"
 environment  = "dev"
-aws_region   = "us-east-1"
+aws_region   = "eu-central-1"
 use_local_mock = true
 deployments = {
   dev = {
-    us-east-1 = {
+    eu-central-1 = {
       features = {
         jitsi_web       = true
         jitsi_vpc       = false
@@ -89,7 +89,7 @@ deployments = {
   }
 
   prod = {
-    us-east-1 = {
+    eu-central-1 = {
       features = {
         jitsi_web       = true
         jitsi_vpc       = true
