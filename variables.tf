@@ -1,95 +1,100 @@
-##                    BITWARDEN                    ##
-
 variable "project_name" {
-  description = "Project-name"
-  type        = map(string)
+  description = "Project name."
+  type        = string
 }
 
-variable "org_id" {
-  description = "Bitwarden Organisation ID"
-  type        = map(string)
+variable "environment" {
+  description = "Deployment environment."
+  type        = string
 }
-
-##                    AWS                    ##
 
 variable "aws_region" {
-  type        = map(string)
-  description = "AWS region to create resources in"
+  description = "AWS region to deploy resources in."
+  type        = string
 }
 
-##    static_web    ##
-
-variable "index_document_jitsi_static_web" {
-  description = "Index document for website hosting"
-  type        = map(string)
+variable "use_local_mock" {
+  description = "Whether to locally mock aws using floci"
+  type        = bool
 }
 
-variable "error_document_jitsi_static_web" {
-  description = "Error document for website hosting"
-  type        = map(string)
-}
+variable "deployments" {
+  description = "Environment and region specific deployment configuration."
 
-variable "force_destroy_jitsi_static_web" {
-  description = "A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error."
-  type        = map(bool)
-}
+  type = map(object({
+    features = object({
+      jitsi_web       = bool
+      jitsi_vpc       = bool
+      cloudflare      = bool
+      jitsi_iam       = bool
+    })
 
-variable "enable_versioning_jitsi_static_web" {
-  description = "A boolean that indicates whether versioning is enabled for the bucket."
-  type        = map(bool)
-}
+    jitsi_web = optional(object({
+      index_document         = string
+      error_document         = string
+      force_destroy          = bool
+      enable_versioning      = bool
+      enable_website         = bool
+      enable_public_read     = bool
+      tags                   = map(string)
+    }))
 
-variable "enable_website_jitsi_static_web" {
-  description = "A boolean that indicates whether to enable static website hosting."
-  type        = map(bool)
-}
+    jitsi_vpc = optional(object({
+      vpc = object({
+        cidr = string
+        tags  = map(string)
+      })
 
-variable "enable_public_read_jitsi_static_web" {
-  description = "A boolean that indicates whether to enable public read access to the bucket."
-  type        = map(bool)
-}
+      subnet = object({
+        cidr = string
+        tags = map(string)
+      })
 
-variable "tags_jitsi_static_web" {
-  description = "A map of tags to assign to the resource."
-  type        = map(string)
-}
+      gateway_endpoint = object({
+        service_name    = string
+        route_table_ids = list(string)
+        tags            = map(string)
+      })
+    }))
 
+    cloudflare = optional(object({
+      domain_name = string
 
-##    jitsi_vpc_subnet    ##
+      cdn = object({
+        dns_record_name              = optional(string, "www")
+        dns_record_type              = optional(string, "CNAME")
+        cloudflare_record_proxied    = optional(bool, true)
+        cloudflare_record_ttl        = optional(number, 1)
+        page_rule_force_https_priority = optional(number, 1)
+        page_rule_cache_all_cache_level    = string
+        page_rule_cache_all_edge_cache_ttl = optional(number, 31536000)
+        page_rule_cache_all_priority       = optional(number, 2)
+      })
 
-variable "jitsi_vpc_cidr" {
-  description = "value"
-  type        = map(string)
-}
+      rate_limit = object({
+        period = optional(number, 60)
+        requests_per_period = optional(number, 100)
+        mitigation_timeout = optional(number, 60)
+      })
 
-variable "jitsi_vpc_tag" {
-  description = "value"
-  type        = map(string)
-}
+      unauthorized_port = object({
+        allowed_ports = optional(list(number), [80, 443])
+      })
 
-variable "jitsi_subnet_cidr" {
-  description = "value"
-  type        = map(string)
-}
+      geo_block = object({
+        block_locations = optional(list(string), ["RU", "CN", "KP"])
+      })
+    }))
 
-variable "jitsi_subnet_tags" {
-  description = "value"
-  type        = map(string)
-}
+    jitsi_iam = optional(object({
+      github_org = string
+      github_repo = string
+      github_branch = string
+      github_oidc_link                 = string
+      oidc_client_id_list              = list(string)
+      gh_actions_s3_deploy_role_name   = string
+      gh_actions_role_policy_name      = string
+    }))
 
-##    jitsi_vpc_gateway_endpoint   ##
-
-variable "jitsi_gateway_endpoint_service_name" {
-  description = "The AWS gateway endpoint service name to connect to (e.g. s3)."
-  type        = map(string)
-}
-
-# variable "jitsi_endpoint_route_table_ids" {
-#   description = "List of route table IDs to associate with the gateway endpoint."
-#   type        = map(list(string))
-# }
-
-variable "jitsi_gateway_endpoint_tags" {
-  description = "Map of tags to assign to the gateway endpoint."
-  type        = map(string)
+  }))
 }

@@ -1,10 +1,12 @@
 resource "aws_s3_bucket" "s3_bucket" {
   bucket        = var.bucket_name
+  bucket_namespace = "account-regional"
   force_destroy = var.force_destroy
   tags          = var.tags
 
   lifecycle {
-    prevent_destroy = true   # prevent accidental deletion
+    create_before_destroy = false
+    prevent_destroy = false   # prevent accidental deletion
     ignore_changes  = [tags] # ignore tag changes outside Terraform
   }
 }
@@ -23,6 +25,7 @@ resource "aws_s3_bucket_website_configuration" "s3_bucket" {
     key = var.error_document
   }
 }
+
 
 # Versioning (created only if enabled)
 resource "aws_s3_bucket_versioning" "s3_bucket" {

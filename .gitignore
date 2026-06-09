@@ -1,8 +1,9 @@
 output.json
 .terraform
-*.tfvars
 *.tfstate.backup
 *.tfstate
 *.lock.hcl
 terraform.tfstate.d
 .DS_Store
+.env
+*.env
