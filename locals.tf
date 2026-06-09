@@ -1,5 +1,5 @@
 locals {
-  deployment_config = var.deployments[var.environment][var.aws_region]
+  deployment_config = var.deployments[var.aws_region]
   features          = local.deployment_config.features
 
   context = {

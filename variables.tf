@@ -21,7 +21,7 @@ variable "use_local_mock" {
 variable "deployments" {
   description = "Environment and region specific deployment configuration."
 
-  type = map(map(object({
+  type = map(object({
     features = object({
       jitsi_web       = bool
       jitsi_vpc       = bool
@@ -96,5 +96,5 @@ variable "deployments" {
       gh_actions_role_policy_name      = string
     }))
 
-  })))
+  }))
 }

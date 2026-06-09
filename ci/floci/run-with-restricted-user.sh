@@ -187,10 +187,10 @@ aws s3api create-bucket \
   >/dev/null 2>&1 || true
 
 echo "Initializing Terraform..."
-terraform init -backend-config=backendfiles/backend.dev.conf
+terraform init -reconfigure -backend-config=backendfiles/backend.dev.conf 
 
 echo "Running Terraform plan..."
-terraform plan
+terraform plan -var-file=envs/dev.tfvars
 
 echo "Running Terraform apply..."
-terraform apply
+terraform apply -var-file=envs/dev.tfvars
