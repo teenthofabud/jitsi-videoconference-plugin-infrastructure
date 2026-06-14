@@ -82,8 +82,8 @@ deployments =  {
         github_branch = "*"
         github_oidc_link            = "https://token.actions.githubusercontent.com"
         oidc_client_id_list         = ["sts.amazonaws.com"]
-        gh_actions_s3_deploy_role_name   = "jitsi-github-actions-s3-deploy-role"
-        gh_actions_role_policy_name = "jitsi-github-actions-s3-deploy-role-policy"
+        gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role"
+        gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-role-policy"
       }
   }
 }
