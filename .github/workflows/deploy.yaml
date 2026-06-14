@@ -3,13 +3,12 @@ name: Deploy Jitsi Resources to AWS
 on: 
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   deploy-to-aws:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Get Secrets
         id: secrets
@@ -18,10 +17,13 @@ jobs:
           cloud_region: eu
           access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
-            50e6adcc-e0a1-4bb0-8755-b469008d3c46 > TEST_A
-            7b1bd0bb-ddac-40a8-a426-b469008d5288 > TEST_B
+            ${{ env.BITWARDEN_AWS_ACCESS_KEY_ID_UUID }} > AWS_ACCESS_KEY_ID
+            ${{ env.BITWARDEN_AWS_SECRET_ACCESS_KEY_UUID }} > AWS_SECRET_ACCESS_KEY
 
-      - name: test bitwarden
-        run: |
-          echo "key id : ${{ steps.secrets.outputs.TEST_A }}"
-          echo "secret key : ${{ steps.secrets.outputs.TEST_B }}"
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_JITSI_ }}
+          aws-region: eu-central-1

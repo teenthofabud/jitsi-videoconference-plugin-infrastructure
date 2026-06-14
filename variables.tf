@@ -23,26 +23,26 @@ variable "deployments" {
 
   type = map(object({
     features = object({
-      jitsi_web       = bool
-      jitsi_vpc       = bool
-      cloudflare      = bool
-      jitsi_iam       = bool
+      jitsi_web  = bool
+      jitsi_vpc  = bool
+      cloudflare = bool
+      jitsi_iam  = bool
     })
 
     jitsi_web = optional(object({
-      index_document         = string
-      error_document         = string
-      force_destroy          = bool
-      enable_versioning      = bool
-      enable_website         = bool
-      enable_public_read     = bool
-      tags                   = map(string)
+      index_document     = string
+      error_document     = string
+      force_destroy      = bool
+      enable_versioning  = bool
+      enable_website     = bool
+      enable_public_read = bool
+      tags               = map(string)
     }))
 
     jitsi_vpc = optional(object({
       vpc = object({
         cidr = string
-        tags  = map(string)
+        tags = map(string)
       })
 
       subnet = object({
@@ -61,20 +61,20 @@ variable "deployments" {
       domain_name = string
 
       cdn = object({
-        dns_record_name              = optional(string, "www")
-        dns_record_type              = optional(string, "CNAME")
-        cloudflare_record_proxied    = optional(bool, true)
-        cloudflare_record_ttl        = optional(number, 1)
-        page_rule_force_https_priority = optional(number, 1)
+        dns_record_name                    = optional(string, "www")
+        dns_record_type                    = optional(string, "CNAME")
+        cloudflare_record_proxied          = optional(bool, true)
+        cloudflare_record_ttl              = optional(number, 1)
+        page_rule_force_https_priority     = optional(number, 1)
         page_rule_cache_all_cache_level    = string
         page_rule_cache_all_edge_cache_ttl = optional(number, 31536000)
         page_rule_cache_all_priority       = optional(number, 2)
       })
 
       rate_limit = object({
-        period = optional(number, 60)
+        period              = optional(number, 60)
         requests_per_period = optional(number, 100)
-        mitigation_timeout = optional(number, 60)
+        mitigation_timeout  = optional(number, 60)
       })
 
       unauthorized_port = object({
@@ -87,13 +87,13 @@ variable "deployments" {
     }))
 
     jitsi_iam = optional(object({
-      github_org = string
-      github_repo = string
-      github_branch = string
-      github_oidc_link                 = string
-      oidc_client_id_list              = list(string)
-      gh_actions_s3_deploy_role_name   = string
-      gh_actions_role_policy_name      = string
+      github_org                     = string
+      github_repo                    = string
+      github_branch                  = string
+      github_oidc_link               = string
+      oidc_client_id_list            = list(string)
+      gh_actions_s3_deploy_role_name = string
+      gh_actions_role_policy_name    = string
     }))
 
   }))

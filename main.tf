@@ -14,12 +14,12 @@ module "jitsi_vpc" {
   config  = local.deployment_config.jitsi_vpc
 }
 
-module "jitsi_iam"{
-  count = local.features.jitsi_iam ? 1 : 0
+module "jitsi_iam" {
+  count  = local.features.jitsi_iam ? 1 : 0
   source = "./components/jitsi-iam"
 
   context = local.context
-  config = local.deployment_config.jitsi_iam
+  config  = local.deployment_config.jitsi_iam
 }
 
 module "cloudflare" {
@@ -29,11 +29,11 @@ module "cloudflare" {
   static_website_endpoint = module.jitsi_web[0].static_web_endpoint
 
   # CDN / DNS
-  domain_name                = local.cloudflare_config.domain_name
-  dns_record_name            = local.cdn_config.dns_record_name
-  dns_record_type            = local.cdn_config.dns_record_type
-  cloudflare_record_proxied  = local.cdn_config.cloudflare_record_proxied
-  cloudflare_record_ttl      = local.cdn_config.cloudflare_record_ttl
+  domain_name               = local.cloudflare_config.domain_name
+  dns_record_name           = local.cdn_config.dns_record_name
+  dns_record_type           = local.cdn_config.dns_record_type
+  cloudflare_record_proxied = local.cdn_config.cloudflare_record_proxied
+  cloudflare_record_ttl     = local.cdn_config.cloudflare_record_ttl
 
   # Page rule: force HTTPS
   page_rule_force_https_target   = local.page_rule_force_https_target
