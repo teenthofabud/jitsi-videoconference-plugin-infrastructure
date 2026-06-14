@@ -5,7 +5,7 @@ data "aws_region" "current" {}
 # S3 bucket name for the Jitsi web static site; using regional namespace
 locals {
   bucket_name_prefix = lower(replace(
-    "${var.context.project_name}-web-${var.context.environment}",
+    "${var.context.project_name}-web",
     "_",
     "-"
   ))
