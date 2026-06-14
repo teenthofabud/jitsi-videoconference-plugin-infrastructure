@@ -18,8 +18,8 @@ jobs:
           cloud_region: eu
           access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
-            63fca68c-453f-4a5f-886e-b461011893a7 > TEST_A
-            eb0c8662-aefd-40f3-bc91-b4610118780d > TEST_B
+            50e6adcc-e0a1-4bb0-8755-b469008d3c46 > TEST_A
+            7b1bd0bb-ddac-40a8-a426-b469008d5288 > TEST_B
 
       - name: test bitwarden
         run: |
