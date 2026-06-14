@@ -19,7 +19,6 @@ jobs:
 
     env:
       TF_ENV: ${{ inputs.environment }}
-      AWS_REGION: eu-central-1
       
     steps:
       - name: Setup Terraform
@@ -53,16 +52,16 @@ jobs:
         id: secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
-          cloud_region: eu
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
           access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
-            ${{ vars.BITWARDEN_AWS_ACCESS_KEY_ID_UUID }} > AWS_ACCESS_KEY_ID
-            ${{ vars.BITWARDEN_AWS_SECRET_ACCESS_KEY_UUID }} > AWS_SECRET_ACCESS_KEY
+            ${{ secrets.BITWARDEN_AWS_ACCESS_KEY_ID_UUID }} > AWS_ACCESS_KEY_ID
+            ${{ secrets.BITWARDEN_AWS_SECRET_ACCESS_KEY_UUID }} > AWS_SECRET_ACCESS_KEY
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          aws-region: eu-central-1
+          aws-region: ${{ vars.AWS_REGION }}
           aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }} 
           aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
           

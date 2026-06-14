@@ -1,4 +1,4 @@
-project_name = "jitsi"
+project_name = "toab-jitsi"
 aws_region   = "eu-central-1"
 use_local_mock = true
 environment = "dev"
