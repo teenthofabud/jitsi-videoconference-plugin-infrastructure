@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Get Secrets
         id: secrets
-        uses: bitwarden/sm-action@v3
+        uses: bitwarden/sm-action@v3.0.0
         with:
           access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
