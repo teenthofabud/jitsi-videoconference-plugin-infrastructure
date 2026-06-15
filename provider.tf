@@ -10,7 +10,7 @@ terraform {
       version = ">= 4.0"
     }
 
-     cloudflare = {
+    cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "~> 5"
     }
@@ -24,12 +24,12 @@ provider "bitwarden-secrets" {}
 provider "cloudflare" {}
 
 provider "aws" {
-  region     = var.aws_region
-  
+  region = var.aws_region
+
   # If local mocking using floci isn't needed, only region property
   # has to be kept, everything else can be removed
-  access_key = var.use_local_mock ? "mock_key" : null
-  secret_key = var.use_local_mock ? "mock_secret" : null
+  access_key                  = var.use_local_mock ? "mock_key" : null
+  secret_key                  = var.use_local_mock ? "mock_secret" : null
   skip_credentials_validation = var.use_local_mock
   skip_metadata_api_check     = var.use_local_mock
   skip_requesting_account_id  = var.use_local_mock

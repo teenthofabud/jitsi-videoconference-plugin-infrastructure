@@ -2,26 +2,79 @@ name: Deploy Jitsi Resources to AWS
 
 on: 
   workflow_dispatch:
-
-permissions:
-  id-token: write
-  contents: read
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+        default: dev
 
 jobs:
   deploy-to-aws:
     runs-on: ubuntu-latest
+
+    env:
+      TF_ENV: ${{ inputs.environment }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      
     steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.6
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve Terraform files
+        id: tf_files
+        run: |
+          BACKEND_CONFIG_FILE="backendfiles/backend.${TF_ENV}.conf"
+          TFVARS_FILE="envs/${TF_ENV}.tfvars"
+
+          if [[ ! -f "${BACKEND_CONFIG_FILE}" ]]; then
+            echo "Backend config file not found: ${BACKEND_CONFIG_FILE}"
+            exit 1
+          fi
+
+          if [[ ! -f "${TFVARS_FILE}" ]]; then
+            echo "tfvars file not found: ${TFVARS_FILE}"
+            exit 1
+          fi
+
+          echo "backend_config_file=${BACKEND_CONFIG_FILE}" >> "$GITHUB_OUTPUT"
+          echo "tfvars_file=${TFVARS_FILE}" >> "$GITHUB_OUTPUT"
+
       - name: Get Secrets
         id: secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
-          cloud_region: eu
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
           access_token: ${{ secrets.BITWARDEN_SECRETS_MANAGER_ACCESS_TOKEN }}
           secrets: |
-            50e6adcc-e0a1-4bb0-8755-b469008d3c46 > TEST_A
-            7b1bd0bb-ddac-40a8-a426-b469008d5288 > TEST_B
+            ${{ secrets.BITWARDEN_AWS_ACCESS_KEY_ID_UUID }} > AWS_ACCESS_KEY_ID
+            ${{ secrets.BITWARDEN_AWS_SECRET_ACCESS_KEY_UUID }} > AWS_SECRET_ACCESS_KEY
 
-      - name: test bitwarden
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }} 
+          aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
+          
+      - name: Terraform Init
+        run: terraform init -reconfigure -backend-config="${{ steps.tf_files.outputs.backend_config_file }}"
+      
+      - name: Terraform Plan
         run: |
-          echo "key id : ${{ steps.secrets.outputs.TEST_A }}"
-          echo "secret key : ${{ steps.secrets.outputs.TEST_B }}"
+          terraform plan \
+          -var-file="${{ steps.tf_files.outputs.tfvars_file }}"
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve \
+          -var-file="${{ steps.tf_files.outputs.tfvars_file }}"

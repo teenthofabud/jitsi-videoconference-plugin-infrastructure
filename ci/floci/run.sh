@@ -8,7 +8,7 @@ fi
 
 #local emulation using floci.io
 export AWS_ENDPOINT_URL=http://localhost:4566
-export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_REGION=eu-central-1
 export AWS_ACCESS_KEY_ID=test
 export AWS_SECRET_ACCESS_KEY=test
 
@@ -26,5 +26,5 @@ docker run --rm -d -p 4566:4566 \
 
 aws s3api create-bucket --bucket jitsi-local-tfstate
 
-terraform init -backend-config=backendfiles/backend.dev.conf
+terraform init -backend-config=backendfiles/backend.local.conf
 
