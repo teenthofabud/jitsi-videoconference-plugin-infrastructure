@@ -59,6 +59,7 @@ jobs:
           secrets: |
             ${{ secrets.BITWARDEN_AWS_ACCESS_KEY_ID_UUID }} > AWS_ACCESS_KEY_ID
             ${{ secrets.BITWARDEN_AWS_SECRET_ACCESS_KEY_UUID }} > AWS_SECRET_ACCESS_KEY
+            ${{ secrets.BITWARDEN_CLOUDFLARE_API_TOKEN_UUID }} > CLOUDFLARE_API_TOKEN
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
@@ -71,11 +72,15 @@ jobs:
         run: terraform init -reconfigure -backend-config="${{ steps.tf_files.outputs.backend_config_file }}"
       
       - name: Terraform Plan
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform plan \
           -var-file="${{ steps.tf_files.outputs.tfvars_file }}"
 
       - name: Terraform Apply
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform apply -auto-approve \
           -var-file="${{ steps.tf_files.outputs.tfvars_file }}"
