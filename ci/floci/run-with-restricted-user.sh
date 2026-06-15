@@ -18,7 +18,7 @@ fi
 
 # Local emulation using floci.io
 export AWS_ENDPOINT_URL="http://localhost:4566"
-export AWS_DEFAULT_REGION="us-east-1"
+export AWS_DEFAULT_REGION="eu-central-1"
 
 # Bootstrap credentials for local emulator
 export AWS_ACCESS_KEY_ID="test"
@@ -187,7 +187,7 @@ aws s3api create-bucket \
   >/dev/null 2>&1 || true
 
 echo "Initializing Terraform..."
-terraform init -reconfigure -backend-config=backendfiles/backend.dev.conf 
+terraform init -reconfigure -backend-config=backendfiles/backend.local.conf 
 
 echo "Running Terraform plan..."
 terraform plan -var-file=envs/dev.tfvars

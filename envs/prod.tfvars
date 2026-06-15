@@ -1,13 +1,13 @@
 project_name = "toab-jitsi"
 aws_region   = "eu-central-1"
-use_local_mock = true
+use_local_mock = false
 environment = "prod"
 deployments = {
     eu-central-1 = {
 
       features = {
         jitsi_web       = true
-        jitsi_vpc       = true
+        jitsi_vpc       = false
         cloudflare      = true
         jitsi_iam       = true
       }
@@ -20,22 +20,22 @@ deployments = {
         enable_website        = true
         enable_public_read    = false
         tags = {
-          Component = "jitsi-web"
+          Component = "jitsi-web-prod"
         }
       }
 
       jitsi_vpc = {
         vpc = {
-          cidr = "10.0.0.0/16"
+          cidr = "10.20.0.0/16"
           tags  = {
-            Component = "jitsi-prod-vpc"
+            Component = "jitsi-vpc-prod"
           }
         }
 
         subnet = {
-          cidr = "10.0.1.0/24"
+          cidr = "10.20.1.0/24"
           tags = {
-            Component = "jitsi-subnet"
+            Component = "jitsi-subnet-prod"
           }
         }
 
@@ -43,7 +43,7 @@ deployments = {
           service_name    = "s3"
           route_table_ids = []
           tags = {
-            Component = "jitsi-gateway-endpoint"
+            Component = "jitsi-gateway-endpoint-prod"
           }
         }
       }
@@ -83,8 +83,8 @@ deployments = {
         github_branch = "*"
         github_oidc_link            = "https://token.actions.githubusercontent.com"
         oidc_client_id_list         = ["sts.amazonaws.com"]
-        gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role"
-        gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-role-policy"
+        gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-prod"
+        gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-role-policy-prod"
       }
     }
   
