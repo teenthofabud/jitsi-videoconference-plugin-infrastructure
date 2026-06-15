@@ -24,6 +24,7 @@ jobs:
 
     env:
       TF_ENV: ${{ inputs.environment }}
+      TF_LOG: ${{ vars.TF_LOG_LEVEL }}
       AWS_REGION: eu-central-1
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
