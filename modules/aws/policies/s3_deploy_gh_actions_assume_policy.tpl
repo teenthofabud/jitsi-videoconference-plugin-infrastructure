@@ -8,9 +8,11 @@
         },
         "Action": "sts:AssumeRoleWithWebIdentity",
         "Condition": {
-          "StringLike": {
-            "token.actions.githubusercontent.com:sub": "repo:${github_org}/${github_repo}:ref:refs/heads/${github_branch}",
+          "StringEquals": {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+          },
+          "StringLike": {
+            "token.actions.githubusercontent.com:sub": "repo:${github_org}/${github_repo}:ref:refs/heads/${github_branch}"
           }
         }
       }
