@@ -10,7 +10,7 @@
         "s3:DeleteObjectVersion",
         "s3:GetObject"
       ],
-      "Resource": "arn:aws:s3:::jitsi-*/*"
+      "Resource": "arn:aws:s3:::toab-jitsi-web-*/*"
     },
     {
       "Sid": "AllowBucketDiscoveryForSync",
@@ -19,7 +19,7 @@
         "s3:ListBucket",
         "s3:GetBucketLocation"
       ],
-      "Resource": "arn:aws:s3:::jitsi-*"
+      "Resource": "arn:aws:s3:::toab-jitsi-web-*"
     }
   ]
 }
