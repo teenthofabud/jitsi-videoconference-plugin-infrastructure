@@ -96,3 +96,9 @@ variable "rate_limit_mitigation_timeout" {
   type        = number
   default     = 60
 }
+
+## Cloudflare worker
+variable "proxy_worker_name" {
+  description = "Name for the cloudflare "
+  type = string
+}
