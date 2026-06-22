@@ -75,6 +75,11 @@ deployments = {
         geo_block = {
           block_locations = ["RU", "CN", "KP"]
         }
+
+        worker = {
+          proxy_worker_name = "proxy-worker"
+          incoming_request_pattern_for_proxy = "todo/*"
+        }
       }
       
       jitsi_iam = {

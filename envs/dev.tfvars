@@ -74,6 +74,11 @@ deployments =  {
         geo_block = {
           block_locations = ["RU", "CN", "KP"]
         }
+
+        worker = {
+          proxy_worker_name = "proxy-worker"
+          incoming_request_pattern_for_proxy = "www.shahad42069.dpdns.org/*"
+        }
       }
 
       jitsi_iam = {
@@ -85,5 +90,6 @@ deployments =  {
         gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-dev"
         gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-dev"
       }
+
   }
 }

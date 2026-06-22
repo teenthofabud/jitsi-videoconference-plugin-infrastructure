@@ -84,6 +84,11 @@ variable "deployments" {
       geo_block = object({
         block_locations = optional(list(string), ["RU", "CN", "KP"])
       })
+
+      worker = object({
+        proxy_worker_name = string
+        incoming_request_pattern_for_proxy = string
+      })
     }))
 
     jitsi_iam = optional(object({
