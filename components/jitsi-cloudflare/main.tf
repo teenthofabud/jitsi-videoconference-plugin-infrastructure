@@ -16,6 +16,7 @@ module "cloudflare" {
   page_rule_force_https_priority = local.cdn_config.page_rule_force_https_priority
 
   # Page rule: cache everything
+  enable_cache_page_rule             = local.enable_cache_page_rule
   page_rule_cache_all_target         = local.page_rule_cache_all_target
   page_rule_cache_all_cache_level    = local.cdn_config.page_rule_cache_all_cache_level
   page_rule_cache_all_edge_cache_ttl = local.cdn_config.page_rule_cache_all_edge_cache_ttl

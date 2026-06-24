@@ -66,6 +66,13 @@ variable "page_rule_cache_all_priority" {
   default     = 2
 }
 
+
+variable "enable_cache_page_rule" {
+  description = "Whether to create the Cloudflare cache-all page rule."
+  type        = bool
+  default     = false
+}
+
 ## unauthorized_port
 variable "allowed_ports" {
   type    = list(number)
