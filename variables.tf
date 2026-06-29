@@ -65,6 +65,7 @@ variable "deployments" {
         dns_record_type                    = optional(string, "CNAME")
         cloudflare_record_proxied          = optional(bool, true)
         cloudflare_record_ttl              = optional(number, 1)
+        enable_cache_page_rule             = optional(bool,false)
         page_rule_force_https_priority     = optional(number, 1)
         page_rule_cache_all_cache_level    = string
         page_rule_cache_all_edge_cache_ttl = optional(number, 31536000)
@@ -83,6 +84,11 @@ variable "deployments" {
 
       geo_block = object({
         block_locations = optional(list(string), ["RU", "CN", "KP"])
+      })
+
+      worker = object({
+        proxy_worker_name = string
+        incoming_request_pattern_for_proxy = string
       })
     }))
 

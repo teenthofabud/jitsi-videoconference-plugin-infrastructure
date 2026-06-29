@@ -56,6 +56,7 @@ deployments = {
           dns_record_type            = "CNAME"
           cloudflare_record_proxied  = true
           cloudflare_record_ttl      = 1
+          enable_cache_page_rule     = false
           page_rule_force_https_priority = 1
           page_rule_cache_all_cache_level    = "cache_everything"
           page_rule_cache_all_edge_cache_ttl = 2419200,
@@ -74,6 +75,11 @@ deployments = {
 
         geo_block = {
           block_locations = ["RU", "CN", "KP"]
+        }
+
+        worker = {
+          proxy_worker_name = "proxy-worker"
+          incoming_request_pattern_for_proxy = "todo/*"
         }
       }
       
