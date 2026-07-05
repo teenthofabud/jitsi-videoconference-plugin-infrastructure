@@ -4,6 +4,7 @@ variable "context" {
     project_name = string
     environment  = string
     aws_region   = string
+    name_prefix  = string
     common_tags  = map(string)
   })
 }
@@ -13,16 +14,17 @@ variable "config" {
   type = object({
     vpc = object({
       cidr = string
-      tags  = map(string)
+      tags = optional(map(string), {})
     })
-    subnet = object({
-      cidr = string
-      tags = map(string)
+    private_subnet_a = object({
+      cidr              = string
+      availability_zone = string
+      tags              = optional(map(string), {})
     })
-    gateway_endpoint = object({
-      service_name    = string
-      route_table_ids = list(string)
-      tags            = map(string)
+    private_subnet_b = object({
+      cidr              = string
+      availability_zone = string
+      tags              = optional(map(string), {})
     })
   })
 }

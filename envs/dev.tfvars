@@ -27,23 +27,22 @@ deployments =  {
       jitsi_vpc = {
         vpc = {
           cidr = "10.0.0.0/16"
-          tags  = {
+          tags = {
             Component = "jitsi-vpc-dev"
           }
         }
-
-        subnet = {
-          cidr = "10.0.1.0/24"
+        private_subnet_a = {
+          cidr              = "10.0.1.0/24"
+          availability_zone = "eu-central-1a"
           tags = {
-            Component = "jitsi-subnet-dev"
+            Component = "jitsi-private-subnet-a-dev"
           }
         }
-
-        gateway_endpoint = {
-          service_name    = "s3"
-          route_table_ids = []
+        private_subnet_b = {
+          cidr              = "10.0.2.0/24"
+          availability_zone = "eu-central-1b"
           tags = {
-            Component = "jitsi-gateway-endpoint-dev"
+            Component = "jitsi-private-subnet-b-dev"
           }
         }
       }
