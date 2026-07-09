@@ -10,6 +10,7 @@ deployments = {
         jitsi_vpc       = false
         cloudflare      = true
         jitsi_iam       = true
+        jitsi_rds       = true
       }
 
       jitsi_web = {
@@ -44,6 +45,30 @@ deployments = {
           tags = {
             Component = "jitsi-private-subnet-b-prod"
           }
+        }
+      }
+
+
+      jitsi_rds = {
+        engine_version        = "16.3"
+        instance_class        = "db.t4g.micro"
+        allocated_storage     = 20
+        max_allocated_storage = 50
+        storage_type          = "gp2"
+        db_name  = "jitsi_access"
+        username = "jitsi_admin"
+        multi_az                = false
+        backup_retention_period = 1 
+        backup_window           = "03:00-04:00"
+        skip_final_snapshot = true
+        deletion_protection = false
+        subnet_group = {
+          tags = {
+            Component = "jitsi-rds-subnet-group-prod"
+          }
+        }
+        tags = {
+          Component = "jitsi-rds-postgres-prod"
         }
       }
 

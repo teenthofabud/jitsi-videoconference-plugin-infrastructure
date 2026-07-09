@@ -27,6 +27,7 @@ variable "deployments" {
       jitsi_vpc  = bool
       cloudflare = bool
       jitsi_iam  = bool
+      jitsi_rds  = bool
     })
 
     jitsi_web = optional(object({
@@ -56,6 +57,25 @@ variable "deployments" {
         availability_zone = string
         tags              = optional(map(string), {})
       })
+    }))
+
+    jitsi_rds = optional(object({
+      engine_version        = optional(string, "16.3")
+      instance_class        = optional(string, "db.t4g.micro")
+      allocated_storage     = optional(number, 20)
+      max_allocated_storage = optional(number, 50)
+      storage_type          = optional(string, "gp2")
+      db_name  = string
+      username = string
+      multi_az                = optional(bool, false)
+      backup_retention_period = optional(number, 1)
+      backup_window           = optional(string, "03:00-04:00")
+      skip_final_snapshot = optional(bool, true)
+      deletion_protection = optional(bool, false)
+      subnet_group = object({
+        tags = optional(map(string), {})
+      })
+      tags = optional(map(string), {})
     }))
 
     cloudflare = optional(object({

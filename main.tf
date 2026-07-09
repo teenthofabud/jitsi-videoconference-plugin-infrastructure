@@ -22,6 +22,17 @@ module "jitsi_iam" {
   config  = local.deployment_config.jitsi_iam
 }
 
+module "jitsi_rds" {
+  count  = local.features.jitsi_rds ? 1 : 0
+  source = "./components/jitsi-rds"
+
+  context = local.context
+  config  = local.deployment.jitsi_rds
+  private_subnet_ids    = module.jitsi_vpc[0].private_subnet_ids
+  rds_security_group_id = module.jitsi_vpc[0].rds_security_group_id
+  db_password = var.db_password
+}
+
 module "cloudflare" {
   count  = local.features.cloudflare && local.features.jitsi_web ? 1 : 0
   source = "./components/jitsi-cloudflare"
