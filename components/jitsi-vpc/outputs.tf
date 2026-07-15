@@ -1,31 +1,37 @@
-# ----      Jitsi VPC      ---- #
-
 output "jitsi_vpc_id" {
-  description = "ID FOR JITSI VPC"
-  value       = module.jitsi_vps.vpc_id
-}
-output "jitsi_subnet_id" {
-  description = "ID FOR JITSI SUBNET"
-  value       = module.jitsi_subnet.subnet_id
+  description = "ID of the Jitsi VPC."
+  value       = module.jitsi_vpc.vpc_id
 }
 
-output "jitsi_subnet_route_table_ids" {
-  description = "The route table ID associated with the subnet created by the module."
-  value       = [data.aws_route_table.subnet_rt.id]
+output "private_subnet_a_id" {
+  description = "ID of private subnet A."
+  value       = module.private_subnet_a.subnet_id
 }
 
-output "jitsi_gateway_endpoint_service_name" {
-  description = "Name Of The gateway_endpoint_service"
-  value       = module.jitsi_gateway_endpoint.vpc_endpoint_name
+output "private_subnet_b_id" {
+  description = "ID of private subnet B."
+  value       = module.private_subnet_b.subnet_id
 }
 
-output "jitsi_vpc_gateway_endpoint_type" {
-  description = "Type of the Endpoint"
-  value       = module.jitsi_gateway_endpoint.vpc_endpoint_type
+output "private_subnet_ids" {
+  description = "Private subnet IDs for Lambda and RDS subnet group."
+  value = [
+    module.private_subnet_a.subnet_id,
+    module.private_subnet_b.subnet_id
+  ]
 }
 
-output "jitsi_vpc_gateway_endpoint_id" {
-  description = "ID of the Gateway Endpoint"
-  value       = module.jitsi_gateway_endpoint.vpc_endpoint_id
+output "private_route_table_id" {
+  description = "ID of the private route table."
+  value       = module.private_route_table.route_table_id
+}
 
+output "lambda_security_group_id" {
+  description = "Security group ID for Lambda functions."
+  value       = module.lambda_security_group.security_group_id
+}
+
+output "rds_security_group_id" {
+  description = "Security group ID for RDS PostgreSQL."
+  value       = module.rds_security_group.security_group_id
 }

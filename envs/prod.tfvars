@@ -115,6 +115,43 @@ deployments = {
         gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-prod"
         gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-prod"
       }
+
+      jitsi_lambda = {
+        migration_lambda = {
+          use_s3_artifact = true
+          s3_bucket       = "toab-jitsi-infrastructure-prod-414772275073-eu-central-1"
+          s3_key          = "lambda/access-list-migration/prod/contact-migration-lambda-1.0.0.jar"
+          handler = "com.toab.jitsi.migration.MigrationHandler::handleRequest"
+          runtime = "java21"
+          memory_size           = 512
+          timeout               = 60
+          log_retention_in_days = 7
+          environment_variables = {
+            LOG_LEVEL = "INFO"
+          }
+          tags = {
+            Component = "jitsi-access-list-migration-lambda-prod"
+          }
+        }
+
+        backend_lambda = {
+          use_s3_artifact = true
+          s3_bucket       = "toab-jitsi-infrastructure-prod-414772275073-eu-central-1"
+          s3_key          = "lambda/access-list-backend/prod/backend-lambda-1.0.0.jar"
+          handler = "com.toab.jitsi.backend.Application::handleRequest"
+          runtime = "java21"
+          memory_size           = 1024
+          timeout               = 30
+          log_retention_in_days = 7
+          environment_variables = {
+            LOG_LEVEL       = "INFO"
+            ALLOWED_ORIGIN = "https://www.toab-jitsi.com"
+          }
+          tags = {
+            Component = "jitsi-access-list-backend-lambda-prod"
+          }
+        }
+      }
     }
   
 }

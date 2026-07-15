@@ -26,6 +26,7 @@ variable "deployments" {
       jitsi_web  = bool
       jitsi_vpc  = bool
       cloudflare = bool
+      jitsi_lambda = bool
       jitsi_iam  = bool
       jitsi_rds  = bool
     })
@@ -123,5 +124,37 @@ variable "deployments" {
       gh_actions_role_policy_name    = string
     }))
 
+    jitsi_lambda = optional(object({
+      migration_lambda = object({
+        use_s3_artifact       = optional(bool, false)
+        filename              = optional(string)
+        s3_bucket             = optional(string)
+        s3_key                = optional(string)
+        s3_object_version     = optional(string)
+        handler               = string
+        runtime               = optional(string, "java21")
+        memory_size           = optional(number, 512)
+        timeout               = optional(number, 60)
+        log_retention_in_days = optional(number, 7)
+        environment_variables = optional(map(string), {})
+        tags                  = optional(map(string), {})
+      })
+
+      backend_lambda = object({
+        use_s3_artifact       = optional(bool, false)
+        filename              = optional(string)
+        s3_bucket             = optional(string)
+        s3_key                = optional(string)
+        s3_object_version     = optional(string)
+        handler               = string
+        runtime               = optional(string, "java21")
+        memory_size           = optional(number, 1024)
+        timeout               = optional(number, 30)
+        log_retention_in_days = optional(number, 7)
+        environment_variables = optional(map(string), {})
+        tags                  = optional(map(string), {})
+      })
+    }))
+    
   }))
 }
