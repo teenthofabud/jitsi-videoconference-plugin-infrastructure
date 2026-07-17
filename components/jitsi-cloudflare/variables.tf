@@ -16,6 +16,7 @@ variable "config" {
       cdn = object({
         dns_record_name                    = optional(string, "www")
         dns_record_type                    = optional(string, "CNAME")
+        enable_cache_page_rule             = optional(bool, false)
         cloudflare_record_proxied          = optional(bool, true)
         cloudflare_record_ttl              = optional(number, 1)
         page_rule_force_https_priority     = optional(number, 1)
