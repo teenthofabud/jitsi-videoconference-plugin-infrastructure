@@ -8,6 +8,13 @@ resource "cloudflare_dns_record" "s3_cname" {
   ttl     = var.cloudflare_record_ttl
 }
 
+resource "cloudflare_zone" "my_domain" {
+  account = {
+    id = local.account_id
+  }
+  name = var.domain_name
+}
+
 resource "cloudflare_page_rule" "force_https" {
   zone_id = local.zone_id
   target  = var.page_rule_force_https_target #"http://www.yourdomain.com/*"

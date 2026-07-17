@@ -14,7 +14,7 @@ module "jitsi_iam" {
   gh_actions_role_policy_name = var.config.gh_actions_role_policy_name
   gh_actions_s3_deploy_role_name = var.config.gh_actions_s3_deploy_role_name
 
-  gh_actions_role_policy = templatefile("${path.module}/policies/s3_deploy_gh_actions_role_policy.tpl",{})
+  gh_actions_role_policy = templatefile("${path.module}/policies/${var.context.environment}/s3_deploy_gh_actions_role_policy.tpl",{})
   gh_actions_assume_policy = templatefile("${path.module}/policies/s3_deploy_gh_actions_assume_policy.tpl", {
     account_id = local.account_id,
     github_org = var.config.github_org
