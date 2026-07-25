@@ -11,14 +11,6 @@ variable "context" {
 variable "config" {
   description = "IAM configuration for GitHub Actions OIDC and S3 deployment role."
   type = object({
-    github_org = string
-    github_repo = string
-    github_branch = string
-    github_oidc_link     = string
-    oidc_client_id_list  = list(string)
-    github_oidc_tags = optional(map(string), {
-      Component = "jitsi-iam"
-    })
     gh_actions_s3_deploy_role_name = string
     gh_actions_s3_deploy_role_tags = optional(map(string), {
       Component = "jitsi-iam"

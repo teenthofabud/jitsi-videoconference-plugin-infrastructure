@@ -84,11 +84,6 @@ deployments = {
       }
       
       jitsi_iam = {
-        github_org = "teenthofabud"
-        github_repo = "jitsi-videoconference-plugin-app"
-        github_branch = "*"
-        github_oidc_link            = "https://token.actions.githubusercontent.com"
-        oidc_client_id_list         = ["sts.amazonaws.com"]
         gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-prod"
         gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-prod"
       }

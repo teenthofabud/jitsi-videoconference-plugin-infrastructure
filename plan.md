@@ -10,7 +10,7 @@ TODO list for contact form backend with Java Lambda + RDS
    - Plain Java Maven project.
    - Receives POST /contact request.
    - Validates name/email/message.
-   - Inserts contact message into RDS PostgreSQL using JDBC.
+   - Inserts contact message into RDS PostgreSQ L using JDBC.
    - Returns success/error response.
 
 3. Update Angular app
