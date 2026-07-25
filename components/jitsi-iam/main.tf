@@ -7,9 +7,6 @@ locals {
 
 module "jitsi_iam" {
   source = "../../modules/aws/iam"
-  github_oidc_link = var.config.github_oidc_link
-  github_oidc_tags = var.config.github_oidc_tags
-  oidc_client_id_list = var.config.oidc_client_id_list
   gh_actions_role_description = var.config.gh_actions_role_description
   gh_actions_role_policy_name = var.config.gh_actions_role_policy_name
   gh_actions_s3_deploy_role_name = var.config.gh_actions_s3_deploy_role_name

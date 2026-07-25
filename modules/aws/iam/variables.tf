@@ -1,17 +1,3 @@
-variable "github_oidc_link" {
-  type = string
-  description = "URL of the GitHub OIDC IdP"
-}
-
-variable "oidc_client_id_list" {
-  type = list(string)
-  description = "audience or the intendent recipient of the tokens from the IdP"
-}
-
-variable "github_oidc_tags" {
-  type = map(string)
-}
-
 variable "gh_actions_s3_deploy_role_tags" {
   type = map(string)
 }

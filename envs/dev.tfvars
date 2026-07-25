@@ -84,7 +84,7 @@ deployments =  {
 
       jitsi_iam = {
         github_org = "teenthofabud"
-        github_repo = "jitsi-videoconference-plugin-app"
+        github_repo = " "
         github_branch = "*"
         github_oidc_link            = "https://token.actions.githubusercontent.com"
         oidc_client_id_list         = ["sts.amazonaws.com"]
