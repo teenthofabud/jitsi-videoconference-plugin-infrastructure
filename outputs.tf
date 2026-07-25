@@ -36,3 +36,14 @@ output "jitsi_vpc_gateway_endpoint_id" {
   description = "ID of the Jitsi VPC gateway endpoint."
   value       = try(module.jitsi_vpc[0].jitsi_vpc_gateway_endpoint_id, null)
 }
+
+
+# --------- Cloudflare -----
+
+output "cloudflare_zone_id" {
+  value = module.cloudflare.cloudflare_zone_id
+}
+
+output "cloudflare_name_servers" {
+  value = module.cloudflare.cloudflare_name_servers
+}
