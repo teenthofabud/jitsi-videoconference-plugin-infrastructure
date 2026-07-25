@@ -49,7 +49,7 @@ deployments =  {
       }
 
       cloudflare = {
-        domain_name = "shahad42069.dpdns.org"
+        domain_name = "jitsi.dpdns.org"
         cdn = {
           dns_record_name            = "www"
           dns_record_type            = "CNAME"
@@ -78,16 +78,11 @@ deployments =  {
 
         worker = {
           proxy_worker_name = "proxy-worker"
-          incoming_request_pattern_for_proxy = "www.shahad42069.dpdns.org/*"
+          incoming_request_pattern_for_proxy = "www.jitsi.dpdns.org/*"
         }
       }
 
       jitsi_iam = {
-        github_org = "teenthofabud"
-        github_repo = " "
-        github_branch = "*"
-        github_oidc_link            = "https://token.actions.githubusercontent.com"
-        oidc_client_id_list         = ["sts.amazonaws.com"]
         gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-dev"
         gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-dev"
       }
