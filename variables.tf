@@ -26,7 +26,6 @@ variable "deployments" {
       jitsi_web  = bool
       jitsi_vpc  = bool
       cloudflare = bool
-      jitsi_iam  = bool
     })
 
     jitsi_web = optional(object({
