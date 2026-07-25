@@ -11,21 +11,3 @@ variable "gh_actions_s3_deploy_role_name" {
   description = "Name for the GitHub Actions role to deploy website content to S3"
 }
 
-variable "gh_actions_assume_policy" {
-  type = string
-  description = "Assume policy for GitHub Actions role"
-}
-
-variable "gh_actions_role_policy_name" {
-  type = string
-  description = "GitHub Actions roles's policy name"
-}
-
-variable "gh_actions_role_description" {
-  type = string
-}
-
-variable "gh_actions_role_policy" {
-  type = string
-  description = "Policy for GitHub Action role with required permissions for deploying to S3"
-}

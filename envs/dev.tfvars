@@ -82,10 +82,5 @@ deployments =  {
         }
       }
 
-      jitsi_iam = {
-        gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-dev"
-        gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-dev"
-      }
-
   }
 }
