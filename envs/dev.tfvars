@@ -8,8 +8,7 @@ deployments =  {
       features = {
         jitsi_web       = true
         jitsi_vpc       = false
-        cloudflare      = true
-        jitsi_iam       = true
+        cloudflare      = true  
       }
 
       jitsi_web = {
