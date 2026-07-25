@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy-to-aws:
-    environment: {{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
       TF_ENV: ${{ inputs.environment }}
