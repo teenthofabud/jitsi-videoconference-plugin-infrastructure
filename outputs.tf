@@ -41,9 +41,11 @@ output "jitsi_vpc_gateway_endpoint_id" {
 # --------- Cloudflare -----
 
 output "cloudflare_zone_id" {
-  value = module.cloudflare.cloudflare_zone_id
+  description = "ID of the Cloudflare zone."
+  value       = try(module.cloudflare[0].cloudflare_zone_id, null)
 }
 
 output "cloudflare_name_servers" {
-  value = module.cloudflare.cloudflare_name_servers
+  description = "Nameservers assigned to the Cloudflare zone."
+  value       = try(module.cloudflare[0].cloudflare_name_servers, [])
 }
