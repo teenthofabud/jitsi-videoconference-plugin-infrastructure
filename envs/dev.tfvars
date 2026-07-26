@@ -48,7 +48,7 @@ deployments =  {
       }
 
       cloudflare = {
-        domain_name = "toab-jitsi.com"
+        domain_name = "jitsi.dpdns.org"
         cdn = {
           dns_record_name            = "www"
           dns_record_type            = "CNAME"
@@ -77,7 +77,7 @@ deployments =  {
 
         worker = {
           proxy_worker_name = "proxy-worker"
-          incoming_request_pattern_for_proxy = "www.toab-jitsi.com/*"
+          incoming_request_pattern_for_proxy = "www.jitsi.dpdns.org/*"
         }
       }
 
