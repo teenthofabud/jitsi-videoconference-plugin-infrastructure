@@ -24,7 +24,7 @@ resource "cloudflare_worker_version" "proxy_worker_version" {
     {
       name = "S3_WEBSITE_ORIGIN"
       type = "plain_text"
-      text = var.static_website_endpoint
+      text = "http://${var.static_website_endpoint}"
     }
   ]
 
