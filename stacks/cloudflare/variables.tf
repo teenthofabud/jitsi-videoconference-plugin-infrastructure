@@ -1,11 +1,21 @@
-variable "context" {
-  description = "Common deployment context shared by all Jitsi components."
-  type = object({
-    project_name = string
-    environment  = string
-    aws_region   = string
-    common_tags  = map(string)
-  })
+variable "project_name" {
+  description = "Project name."
+  type        = string
+}
+
+variable "environment" {
+  description = "Deployment environment."
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWS region to deploy resources in."
+  type        = string
+}
+
+variable "terraform_state_bucket" {
+  description = "tfstate bucket name of the AWS stack"
+  type        = string
 }
 
 variable "config" {
@@ -45,9 +55,4 @@ variable "config" {
       })
     })
 
-}
-
-variable "static_web_endpoint" {
-  description = "Jitsi s3 bucket website endpoint"
-  type = string
 }
