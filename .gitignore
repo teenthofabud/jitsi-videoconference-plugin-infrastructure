@@ -1,9 +1,38 @@
-output.json
-.terraform
-*.tfstate.backup
+# Terraform working directories
+**/.terraform/*
+
+# Terraform state files
 *.tfstate
-*.lock.hcl
-terraform.tfstate.d
-.DS_Store
+*.tfstate.*
+terraform.tfstate.d/
+
+# Terraform plan files
+*.tfplan
+tfplan
+plan.out
+
+# Terraform crash/error logs
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Generated output files
+output.json
+
+# Environment and secret files
 .env
+.env.*
 *.env
+!.env.example
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+
+plan.md

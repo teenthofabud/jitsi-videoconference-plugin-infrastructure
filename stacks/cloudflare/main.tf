@@ -1,10 +1,9 @@
 module "cloudflare" {
 
-  source = "../../modules/cloudflare"
-#   static_website_endpoint = module.jitsi_web[0].static_web_endpoint
-
+  source = "./modules/cloudflare"
+  
   # CDN / DNS
-  static_website_endpoint = var.static_web_endpoint
+  static_website_endpoint = local.static_web_endpoint
   domain_name               = local.cloudflare_config.domain_name
   dns_record_name           = local.cdn_config.dns_record_name
   dns_record_type           = local.cdn_config.dns_record_type

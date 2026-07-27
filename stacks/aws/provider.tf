@@ -1,25 +1,15 @@
 terraform {
   required_providers {
 
-    bitwarden-secrets = {
-      source = "registry.terraform.io/bitwarden/bitwarden-secrets"
-    }
-
     aws = {
       source  = "hashicorp/aws"
       version = ">= 4.0"
-    }
-
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 5"
     }
 
   }
   required_version = ">= 1.1.0"
 }
 
-provider "cloudflare" {}
 
 provider "aws" {
   region = var.aws_region
