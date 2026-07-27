@@ -1,6 +1,7 @@
 project_name = "toab-jitsi"
 aws_region   = "eu-central-1"
 environment = "dev"
+terraform_state_bucket = "toab-jitsi-infrastructure-dev-414772275073-eu-central-1-an"
 config = {
     domain_name = "jitsi.dpdns.org"
     cdn = {
