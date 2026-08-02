@@ -2,12 +2,14 @@ project_name = "toab-jitsi"
 aws_region   = "eu-central-1"
 use_local_mock = false
 environment = "prod"
+terraform_state_bucket = "toab-jitsi-infrastructure-prod-414772275073-eu-central-1-an"
 deployments = {
     eu-central-1 = {
 
       features = {
         jitsi_web       = true
         jitsi_vpc       = false
+        jitsi_backend   = true
         cloudflare      = true
       }
 
@@ -46,12 +48,55 @@ deployments = {
           }
         }
       }
-      
-      
-      jitsi_iam = {
-        gh_actions_s3_deploy_role_name   = "toab-jitsi-github-actions-s3-deploy-role-prod"
-        gh_actions_role_policy_name = "toab-jitsi-github-actions-s3-deploy-policy-prod"
+
+      jitsi_backend = {
+        moderator = {
+          function_name         = "toab-jitsi-moderator-service"
+          handler               = "bootstrap"
+          runtime               = "provided.al2023"
+          architectures         = ["arm64"]
+          memory_size           = 256
+          timeout               = 30
+          log_retention_in_days = 7
+
+          function_url = {
+            auth_type         = "NONE"
+            invoke_mode       = "BUFFERED"
+            allow_credentials = false
+            allow_headers     = ["content-type", "authorization"]
+            allow_methods     = ["POST"]
+            allow_origins     = ["https://www.jitsi.dpdns.org/"]
+            expose_headers    = []
+            max_age           = 300
+          }
+          tags = {
+            Component   = "toab-jitsi-moderator-service-lambda-dev"
+          }
+        }
+
+        db_ping = {
+          function_name         = "toab-jitsi-db-ping-dev"
+          handler               = "bootstrap"
+          runtime               = "provided.al2023"
+          architectures         = ["arm64"]
+          memory_size           = 128
+          timeout               = 15
+          log_retention_in_days = 7
+
+          schedule = {
+            expression                   = "rate(12 hours)"
+            timezone                     = "UTC"
+            state                        = "ENABLED"
+            input                        = "{}"
+            maximum_event_age_in_seconds = 3600
+            maximum_retry_attempts       = 0
+          }
+          tags = {  
+            Component   = "toab-jitsi-aiven-db-ping-lambda-dev"
+          }
+        }
       }
+       
     }
   
 }

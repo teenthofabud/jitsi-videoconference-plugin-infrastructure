@@ -31,12 +31,7 @@ module "jitsi_static_web" {
   error_document     = var.config.error_document
   tags = merge(
     var.context.common_tags,
-    var.config.tags,
-    {
-      CreatedBy   = "terraform"
-      Environment = var.context.environment
-      Component   = "jitsi-web"
-    }
+    var.config.tags
   )
 }
 
@@ -44,7 +39,7 @@ module "jitsi_static_web" {
 resource "aws_s3_bucket_policy" "website_policy" {
   count = var.config.enable_public_read ? 1 : 0
   bucket = module.jitsi_static_web.bucket_id
-  policy = templatefile("${path.module}/policies/jitsi_static_web_pub_access.tpl", {
+  policy = templatefile("${path.module}/policies/jitsi_static_web_pub_access.json", {
     bucket_arn = module.jitsi_static_web.bucket_arn
   })
   depends_on = [module.jitsi_static_web]

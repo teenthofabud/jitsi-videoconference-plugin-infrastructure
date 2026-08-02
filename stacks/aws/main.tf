@@ -14,3 +14,15 @@ module "jitsi_vpc" {
   config  = local.deployment_config.jitsi_vpc
 }
 
+module "jitsi_backend" {
+  count  = local.deployment.features.jitsi_backend ? 1 : 0
+  source = "./components/jitsi-backend"
+
+  context = local.context
+  terraform_state_bucket = var.terraform_state_bucket
+  config = {
+    moderator = local.deployment.jitsi_backend.moderator
+    db_ping   = local.deployment.jitsi_backend.db_ping
+  }
+}
+
