@@ -1,20 +1,35 @@
 
-resource "cloudflare_dns_record" "s3_cname" {
+resource "cloudflare_dns_record" "website_s3_cname" {
   zone_id = local.zone_id
-  name    = var.dns_record_name
+  name    = var.website_dns_record_name
   content = var.static_website_endpoint
   type    = var.dns_record_type
   proxied = var.cloudflare_record_proxied
   ttl     = var.cloudflare_record_ttl
 }
 
-resource "cloudflare_page_rule" "force_https" {
+resource "cloudflare_dns_record" "api_lambda_cname" {
   zone_id = local.zone_id
-  target  = var.page_rule_force_https_target #"http://www.yourdomain.com/*"
-  actions = {
-    always_use_https = true
-  }
-  priority = var.page_rule_force_https_priority
+  name    = var.api_dns_record_name
+  content = var.static_website_endpoint
+  type    = var.dns_record_type
+  proxied = var.cloudflare_record_proxied
+  ttl     = var.cloudflare_record_ttl
+}
+
+# resource "cloudflare_page_rule" "force_https" {
+#   zone_id = local.zone_id
+#   target  = var.page_rule_force_https_target #"http://www.yourdomain.com/*"
+#   actions = {
+#     always_use_https = true
+#   }
+#   priority = var.page_rule_force_https_priority
+# }
+
+resource "cloudflare_zone_setting" "always_use_https" {
+  zone_id    = local.zone_id
+  setting_id = "always_use_https"
+  value      = "on"
 }
 
 resource "cloudflare_page_rule" "cache_all" {

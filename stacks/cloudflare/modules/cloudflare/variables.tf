@@ -9,8 +9,14 @@ variable "static_website_endpoint" {
   type        = string
 }
 
-variable "dns_record_name" {
-  description = "The name of the DNS record to create (e.g., www)."
+variable "api_dns_record_name" {
+  description = "The name of the DNS record to create for api endpoint"
+  type        = string
+  default     = "api"
+}
+
+variable "website_dns_record_name" {
+  description = "The name of the DNS record to create for the website"
   type        = string
   default     = "www"
 }
@@ -33,16 +39,16 @@ variable "cloudflare_record_ttl" {
   default     = 1
 }
 
-variable "page_rule_force_https_target" {
-  description = "The target URL pattern for the force HTTPS page rule."
-  type        = string
-}
+# variable "page_rule_force_https_target" {
+#   description = "The target URL pattern for the force HTTPS page rule."
+#   type        = string
+# }
 
-variable "page_rule_force_https_priority" {
-  description = "The priority of the force HTTPS page rule."
-  type        = number
-  default     = 1
-}
+# variable "page_rule_force_https_priority" {
+#   description = "The priority of the force HTTPS page rule."
+#   type        = number
+#   default     = 1
+# }
 
 variable "page_rule_cache_all_target" {
   description = "The target URL pattern for the cache all page rule."

@@ -5,14 +5,15 @@ module "cloudflare" {
   # CDN / DNS
   static_website_endpoint   = local.static_web_endpoint
   domain_name               = local.cloudflare_config.domain_name
-  dns_record_name           = local.cdn_config.dns_record_name
+  website_dns_record_name   = local.cdn_config.website_dns_record_name
+  api_dns_record_name       = local.cdn_config.api_dns_record_name
   dns_record_type           = local.cdn_config.dns_record_type
   cloudflare_record_proxied = local.cdn_config.cloudflare_record_proxied
   cloudflare_record_ttl     = local.cdn_config.cloudflare_record_ttl
 
   # Page rule: force HTTPS
-  page_rule_force_https_target   = local.page_rule_force_https_target
-  page_rule_force_https_priority = local.cdn_config.page_rule_force_https_priority
+  # page_rule_force_https_target   = local.page_rule_force_https_target
+  # page_rule_force_https_priority = local.cdn_config.page_rule_force_https_priority
 
   # Page rule: cache everything
   enable_cache_page_rule             = local.cdn_config.enable_cache_page_rule

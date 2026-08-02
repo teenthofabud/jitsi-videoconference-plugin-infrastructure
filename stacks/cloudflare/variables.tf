@@ -24,7 +24,8 @@ variable "config" {
     domain_name = string
 
     cdn = object({
-      dns_record_name                    = optional(string, "www")
+      website_dns_record_name                    = optional(string, "www")
+      api_dns_record_name                    = optional(string, "www")
       dns_record_type                    = optional(string, "CNAME")
       enable_cache_page_rule             = optional(bool, false)
       cloudflare_record_proxied          = optional(bool, true)
