@@ -5,13 +5,13 @@ module "moderator_lambda" {
   lambda_function_name         = var.config.moderator.function_name
   lambda_execution_role_name   = "${var.config.moderator.function_name}-execution-role-${var.context.environment}"
   lambda_execution_policy_name = "${var.config.moderator.function_name}-execution-policy-${var.context.environment}"
-  placeholder_zip_path         = var.config.moderator.placeholder_zip_path
+  placeholder_zip_path         = "${path.module}/artifacts/placeholder.zip"
   handler                      = var.config.moderator.handler
   runtime                      = var.config.moderator.runtime
   architectures                = var.config.moderator.architectures
   memory_size                  = var.config.moderator.memory_size
   timeout                      = var.config.moderator.timeout
-  environment_variables        = {}
+  environment_variables        = local.aiven_database_environment_variables
   log_retention_in_days        = var.config.moderator.log_retention_in_days
 
   lambda_execution_policy_path = "${path.module}/policies/moderator-execution-policy.json"
@@ -40,13 +40,13 @@ module "db_ping_lambda" {
   lambda_function_name         = var.config.db_ping.function_name
   lambda_execution_role_name   = "${local.db_ping_name_prefix}-execution-role-${var.environment}"
   lambda_execution_policy_name = "${local.db_ping_name_prefix}-execution-policy-${var.environment}"
-  placeholder_zip_path         = ""
+  placeholder_zip_path         = "${path.module}/artifacts/placeholder.zip"
   handler                      = var.config.db_ping.handler
   runtime                      = var.config.db_ping.runtime
   architectures                = var.config.db_ping.architectures
   memory_size                  = var.config.db_ping.memory_size
   timeout                      = var.config.db_ping.timeout
-  environment_variables        = {}
+  environment_variables        = local.aiven_database_environment_variables
   log_retention_in_days        = var.config.db_ping.log_retention_in_days
 
   lambda_execution_policy_path = "${path.module}/policies/db-ping-execution-policy.json"
