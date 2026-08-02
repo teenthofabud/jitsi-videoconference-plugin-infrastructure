@@ -6,17 +6,17 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_lambda_function" "this" {
-  function_name = var.lambda_function_name
-  description   = var.description
+  function_name    = var.lambda_function_name
+  description      = var.description
   filename         = var.placeholder_zip_path
   source_code_hash = filebase64sha256(var.placeholder_zip_path)
-  package_type = "Zip"
-  role         = aws_iam_role.lambda_execution.arn
-  handler      = var.handler
-  runtime      = var.runtime
-  architectures = var.architectures
-  memory_size   = var.memory_size
-  timeout       = var.timeout
+  package_type     = "Zip"
+  role             = aws_iam_role.lambda_execution.arn
+  handler          = var.handler
+  runtime          = var.runtime
+  architectures    = var.architectures
+  memory_size      = var.memory_size
+  timeout          = var.timeout
 
   dynamic "environment" {
     for_each = length(var.environment_variables) > 0 ? [1] : []
@@ -81,10 +81,10 @@ resource "aws_scheduler_schedule" "this" {
     var.schedule_name,
     "${var.lambda_function_name}-schedule"
   )
-  description                   = var.schedule_description
-  schedule_expression           = var.schedule_expression
-  schedule_expression_timezone  = var.schedule_timezone
-  state                         = var.schedule_state
+  description                  = var.schedule_description
+  schedule_expression          = var.schedule_expression
+  schedule_expression_timezone = var.schedule_timezone
+  state                        = var.schedule_state
 
   flexible_time_window {
     mode = "OFF"

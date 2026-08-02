@@ -9,7 +9,7 @@ variable "context" {
 }
 
 variable "terraform_state_bucket" {
-  type = string
+  type        = string
   description = "Terraform state bucket for the Aiven stack"
 }
 
@@ -18,14 +18,14 @@ variable "config" {
 
   type = object({
     moderator = object({
-      function_name          = string
-      handler                = string
-      runtime                = string
-      architectures          = list(string)
-      memory_size            = number
-      timeout                = number
-      log_retention_in_days  = number
-      tags                   = map(string)
+      function_name         = string
+      handler               = string
+      runtime               = string
+      architectures         = list(string)
+      memory_size           = number
+      timeout               = number
+      log_retention_in_days = number
+      tags                  = map(string)
 
       function_url = optional(object({
         auth_type         = string
@@ -40,14 +40,14 @@ variable "config" {
     })
 
     db_ping = object({
-      function_name          = string
-      handler                = string
-      runtime                = string
-      architectures          = list(string)
-      memory_size            = number
-      timeout                = number
-      log_retention_in_days  = number
-      tags                   = map(string)
+      function_name         = string
+      handler               = string
+      runtime               = string
+      architectures         = list(string)
+      memory_size           = number
+      timeout               = number
+      log_retention_in_days = number
+      tags                  = map(string)
 
       schedule = optional(object({
         expression                   = string

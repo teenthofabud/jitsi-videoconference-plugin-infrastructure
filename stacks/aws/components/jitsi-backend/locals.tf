@@ -4,7 +4,7 @@ data "terraform_remote_state" "aiven" {
   config = {
     bucket       = var.terraform_state_bucket
     key          = "tfstate/aiven.tfstate"
-    region       = var.aws_region
+    region       = var.context.aws_region
     use_lockfile = true
   }
 }

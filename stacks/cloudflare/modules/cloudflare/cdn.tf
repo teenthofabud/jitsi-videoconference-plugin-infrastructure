@@ -19,11 +19,11 @@ resource "cloudflare_page_rule" "force_https" {
 
 resource "cloudflare_page_rule" "cache_all" {
   count = var.enable_cache_page_rule ? 1 : 0
-  
+
   zone_id = data.cloudflare_zone.domain.id
-  target  =  var.page_rule_cache_all_target #"www.yourdomain.com/*"
+  target  = var.page_rule_cache_all_target #"www.yourdomain.com/*"
   actions = {
-    cache_level    = var.page_rule_cache_all_cache_level #"Cache Everything" 
+    cache_level    = var.page_rule_cache_all_cache_level    #"Cache Everything" 
     edge_cache_ttl = var.page_rule_cache_all_edge_cache_ttl #2419200 (4 weeks) 
   }
   priority = var.page_rule_cache_all_priority #2

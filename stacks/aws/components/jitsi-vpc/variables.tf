@@ -13,7 +13,7 @@ variable "config" {
   type = object({
     vpc = object({
       cidr = string
-      tags  = map(string)
+      tags = map(string)
     })
     subnet = object({
       cidr = string

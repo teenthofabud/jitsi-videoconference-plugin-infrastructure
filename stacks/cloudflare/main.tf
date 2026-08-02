@@ -1,9 +1,9 @@
 module "cloudflare" {
 
   source = "./modules/cloudflare"
-  
+
   # CDN / DNS
-  static_website_endpoint = local.static_web_endpoint
+  static_website_endpoint   = local.static_web_endpoint
   domain_name               = local.cloudflare_config.domain_name
   dns_record_name           = local.cdn_config.dns_record_name
   dns_record_type           = local.cdn_config.dns_record_type
@@ -33,10 +33,10 @@ module "cloudflare" {
   rate_limit_requests_per_period = local.rate_limit_config.requests_per_period
 
   # Worker
-  proxy_worker_name = local.cloudflare_config.worker.proxy_worker_name
-  proxy_worker_module_name = "proxy_worker.js"
-  proxy_worker_path = "${path.module}/scripts/proxy_worker.js"
+  proxy_worker_name                  = local.cloudflare_config.worker.proxy_worker_name
+  proxy_worker_module_name           = "proxy_worker.js"
+  proxy_worker_path                  = "${path.module}/scripts/proxy_worker.js"
   incoming_request_pattern_for_proxy = local.cloudflare_config.worker.incoming_request_pattern_for_proxy
-  
+
 }
 

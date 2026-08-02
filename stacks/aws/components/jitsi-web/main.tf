@@ -21,7 +21,7 @@ locals {
 
 # Create the S3 bucket using the reusable S3 static website module.
 module "jitsi_static_web" {
-  source = "../../modules/aws/s3"
+  source             = "../../modules/aws/s3"
   bucket_name        = local.bucket_name
   force_destroy      = var.config.force_destroy
   enable_versioning  = var.config.enable_versioning
@@ -37,7 +37,7 @@ module "jitsi_static_web" {
 
 # Policy for Static Website Public Access
 resource "aws_s3_bucket_policy" "website_policy" {
-  count = var.config.enable_public_read ? 1 : 0
+  count  = var.config.enable_public_read ? 1 : 0
   bucket = module.jitsi_static_web.bucket_id
   policy = templatefile("${path.module}/policies/jitsi_static_web_pub_access.json", {
     bucket_arn = module.jitsi_static_web.bucket_arn
@@ -52,7 +52,7 @@ resource "null_resource" "jitsi_web_outputfile" {
     s3_bucket_arn_for_static_web = module.jitsi_static_web.bucket_arn
     s3_static_web_endpoint       = module.jitsi_static_web.website_endpoint
   }
-  
+
   provisioner "local-exec" {
     command = <<EOT
     echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" >> output.json

@@ -28,8 +28,8 @@ variable "deployments" {
 
   type = map(object({
     features = object({
-      jitsi_web  = bool
-      jitsi_vpc  = bool
+      jitsi_web     = bool
+      jitsi_vpc     = bool
       jitsi_backend = bool
     })
 
@@ -100,10 +100,10 @@ variable "deployments" {
         tags                  = map(string)
 
         schedule = optional(object({
-          expression = string
-          timezone   = string
-          state      = string
-          input      = string
+          expression                   = string
+          timezone                     = string
+          state                        = string
+          input                        = string
           maximum_event_age_in_seconds = number
           maximum_retry_attempts       = number
         }))

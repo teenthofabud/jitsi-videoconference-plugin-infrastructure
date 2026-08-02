@@ -7,7 +7,7 @@ output "service_port" {
 }
 
 output "database_name" {
-  value = aiven_pg.jitsi.pg.dbname
+  value = aiven_pg.jitsi.pg[0].dbname
 }
 
 output "service_username" {

@@ -1,10 +1,5 @@
 #---------- IAM -----------
 
-variable "lambda_function_name" {
-  description = "Name of the Lambda function."
-  type        = string
-}
-
 variable "lambda_execution_role_name" {
   description = "Name of the Lambda execution IAM role."
   type        = string
@@ -28,12 +23,6 @@ variable "scheduler_policy_name" {
 }
 
 #--------- Lambda -----------
-
-variable "schedule_name" {
-  description = "Name of the EventBridge Scheduler schedule."
-  type        = string
-  default     = null
-}
 
 variable "lambda_function_name" {
   description = "Name of the Lambda function."

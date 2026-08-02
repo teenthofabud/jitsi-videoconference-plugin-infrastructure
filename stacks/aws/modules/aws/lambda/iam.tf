@@ -6,8 +6,8 @@ resource "aws_iam_role" "lambda_execution" {
 }
 
 resource "aws_iam_role_policy" "lambda_execution" {
-  name   = var.lambda_execution_policy_name
-  role   = aws_iam_role.lambda_execution.id
+  name = var.lambda_execution_policy_name
+  role = aws_iam_role.lambda_execution.id
   policy = templatefile(
     var.lambda_execution_policy_path,
     merge(
@@ -20,7 +20,7 @@ resource "aws_iam_role_policy" "lambda_execution" {
 }
 
 resource "aws_iam_role" "scheduler" {
-  count = var.enable_schedule ? 1 : 0
+  count              = var.enable_schedule ? 1 : 0
   name               = var.scheduler_role_name
   assume_role_policy = file("${path.module}/policies/scheduler-assume-role.json")
 
@@ -29,8 +29,8 @@ resource "aws_iam_role" "scheduler" {
 
 resource "aws_iam_role_policy" "scheduler_invoke_lambda" {
   count = var.enable_schedule ? 1 : 0
-  name = var.scheduler_policy_name
-  role = aws_iam_role.scheduler[0].id
+  name  = var.scheduler_policy_name
+  role  = aws_iam_role.scheduler[0].id
   policy = templatefile(
     "${path.module}/policies/scheduler-invoke-lambda.json",
     {

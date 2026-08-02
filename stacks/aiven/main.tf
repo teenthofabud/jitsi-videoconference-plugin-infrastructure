@@ -2,7 +2,7 @@ resource "aiven_pg" "jitsi" {
   project      = var.aiven_project
   service_name = var.service_name
   plan         = var.plan
-
+  
   termination_protection = var.termination_protection
 
   dynamic "tech_emails" {

@@ -11,7 +11,7 @@ resource "cloudflare_ruleset" "zone_rl" {
       description = "Rate limit API requests by IP"
       # expression  = "(http.request.uri.path matches \"^/api/\")"
       expression = true
-      action      = "block"
+      action     = "block"
       ratelimit = {
         characteristics     = ["cf.colo.id", "ip.src"]
         period              = var.rate_limit_period

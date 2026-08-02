@@ -6,7 +6,7 @@ variable "domain_name" {
 
 variable "static_website_endpoint" {
   description = "s3 static website endpoint"
-  type = string
+  type        = string
 }
 
 variable "dns_record_name" {
@@ -107,20 +107,20 @@ variable "rate_limit_mitigation_timeout" {
 ## Cloudflare worker
 variable "proxy_worker_name" {
   description = "Name for the cloudflare woker"
-  type = string
+  type        = string
 }
 
 variable "proxy_worker_module_name" {
   description = "Name of the module which exports the fetch method in the worker script"
-  type = string
+  type        = string
 }
 
 variable "proxy_worker_path" {
   description = "Path to the script for the cloudflare worker"
-  type = string
+  type        = string
 }
 
 variable "incoming_request_pattern_for_proxy" {
   description = "Pattern to match the incoming requests against"
-  type = string
+  type        = string
 }
