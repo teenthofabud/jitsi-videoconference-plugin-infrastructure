@@ -12,6 +12,7 @@ data "terraform_remote_state" "aws" {
 locals {
 
   static_web_endpoint          = data.terraform_remote_state.aws.outputs.static_web_endpoint
+  api_endpoint                 = data.terraform_remote_state.aws.outputs.jitsi_backend_moderator_function_url
   cloudflare_config            = var.config
   cdn_config                   = local.cloudflare_config.cdn
   rate_limit_config            = local.cloudflare_config.rate_limit

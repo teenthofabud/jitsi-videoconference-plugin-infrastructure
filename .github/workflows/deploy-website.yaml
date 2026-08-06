@@ -1,0 +1,96 @@
+name: Deploy Jitsi AWS resources for the static website and configure Cloudflare resources for website
+
+on: 
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+        default: dev
+
+concurrency:
+  group: jitsi-infra-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-jitsi-website-and-configure-cloudflare:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    env:
+      TF_ENV: ${{ inputs.environment }}
+      TF_LOG: ${{ vars.TF_LOG_LEVEL }}
+      
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.6
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Fetchig secrets from Bitwarden
+      - name: Get Secrets
+        id: secrets
+        uses: bitwarden/sm-action@v3.0.0
+        with:
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
+          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
+          secrets: |
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
+            ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
+
+      # AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }} 
+          aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
+
+      # AWS Terraform Execution target only website resources
+      - name: Initialize AWS Terraform -- target only website resources
+        run: |
+          terraform -chdir=stacks/aws init \
+            -reconfigure \
+            -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
+
+      - name: Plan AWS Terraform -- target only website resources
+        run: |
+          terraform -chdir=stacks/aws plan \
+            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
+            -target='module.jitsi_web[0]' \
+            -out=tfplan
+
+      - name: Apply AWS Terraform
+        run: |
+          terraform -chdir=stacks/aws apply -auto-approve tfplan
+
+      # Cloudflare Terraform Execution, target both common resources and website dns
+      - name: Initialize Cloudflare Terraform -- target both common resources and website dns
+        run: |
+          terraform -chdir=stacks/cloudflare init \
+            -reconfigure \
+            -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
+
+      - name: Plan Cloudflare Terraform -- target both common resources and website dns
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+        run: |
+          terraform -chdir=stacks/cloudflare plan \
+            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
+            -target='module.cloudflare_common' \
+            -target='module.website_dns' \
+            -out=tfplan
+
+      - name: Apply Cloudflare Terraform
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+        run: |
+          terraform -chdir=stacks/cloudflare apply -auto-approve tfplan

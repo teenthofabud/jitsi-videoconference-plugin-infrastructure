@@ -1,4 +1,5 @@
 ## cdn
+
 variable "domain_name" {
   description = "The domain name to be used with Cloudflare."
   type        = string
@@ -7,36 +8,6 @@ variable "domain_name" {
 variable "static_website_endpoint" {
   description = "s3 static website endpoint"
   type        = string
-}
-
-variable "api_dns_record_name" {
-  description = "The name of the DNS record to create for api endpoint"
-  type        = string
-  default     = "api"
-}
-
-variable "website_dns_record_name" {
-  description = "The name of the DNS record to create for the website"
-  type        = string
-  default     = "www"
-}
-
-variable "dns_record_type" {
-  description = "The type of DNS record to create (e.g., A, CNAME)."
-  type        = string
-  default     = "CNAME"
-}
-
-variable "cloudflare_record_proxied" {
-  description = "A boolean that indicates whether the record is receiving the performance and security benefits of Cloudflare."
-  type        = bool
-  default     = true
-}
-
-variable "cloudflare_record_ttl" {
-  description = "The TTL (time to live) for the DNS record."
-  type        = number
-  default     = 1
 }
 
 # variable "page_rule_force_https_target" {

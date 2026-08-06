@@ -1,0 +1,110 @@
+name: Destroy AWS resources for backend and corresponding Cloudflare configurations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to destroy"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+        default: dev
+
+      confirm_destroy:
+        description: "Type DESTROY to confirm"
+        required: true
+        type: string
+
+concurrency:
+  group: jitsi-infra-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  destroy-jitsi-backend-and-cloudflare-config:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      TF_ENV: ${{ inputs.environment }}
+      TF_LOG: ${{ vars.TF_LOG_LEVEL }}
+
+    steps:
+      # Confirmation
+      - name: Validate destroy confirmation
+        run: |
+          if [[ "${{ inputs.confirm_destroy }}" != "DESTROY" ]]; then
+            echo "Destroy confirmation failed. Type DESTROY to proceed."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.6
+
+      # Fetchig secrets from Bitwarden
+      - name: Get Secrets
+        id: secrets
+        uses: bitwarden/sm-action@v3.0.0
+        with:
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
+          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
+          secrets: |
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
+            ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
+        
+        # AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
+
+      # Destroy Cloudflare resources, target only backend dns 
+      - name: Terraform Init -- target only backend dns
+        run: |
+          terraform -chdir=stacks/cloudflare init \
+          -reconfigure \
+          -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
+
+      - name: Terraform Destroy Plan -- target only backend dns
+        env:
+            CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+        run: |
+          terraform -chdir=stacks/cloudflare plan -destroy \
+            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
+            -target='module.api_dns' \
+            -out=destroy.tfplan
+
+      - name: Terraform Destroy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+        run: |
+          terraform -chdir=stacks/cloudflare apply -auto-approve \
+            destroy.tfplan
+
+      # Destroy AWS resources, target only backend resources
+      - name: Terraform Init -- target only backend resources
+        run: |
+          terraform -chdir=stacks/aws init \
+          -reconfigure \
+          -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
+
+      - name: Terraform Destroy Plan -- target only backend resources
+        run: |
+          terraform -chdir=stacks/aws plan -destroy \
+            -target='module.jitsi_backend[0]' \
+            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
+            -out=destroy.tfplan
+
+      - name: Terraform Destroy
+        run: |
+          terraform -chdir=stacks/aws apply -auto-approve \
+            destroy.tfplan

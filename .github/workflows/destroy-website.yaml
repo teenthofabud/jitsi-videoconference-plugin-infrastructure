@@ -1,4 +1,4 @@
-name: Destroy AWS resources for the static website and corresponding Cloudflare configurations
+name: Destroy AWS resources for website and corresponding Cloudflare configurations
 
 on:
   workflow_dispatch:
@@ -18,14 +18,17 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: jitsi-infra-${{ inputs.environment }}
+  cancel-in-progress: false
+
 jobs:
-  destroy-resources-on-aws:
+  destroy-jitsi-website-and-cloudflare-config:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       TF_ENV: ${{ inputs.environment }}
       TF_LOG: ${{ vars.TF_LOG_LEVEL }}
-      AWS_REGION: eu-central-1
 
     steps:
       # Confirmation
@@ -43,32 +46,6 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.15.6
-
-      # Resolve tfvars and backendfiles
-      - name: Resolve Terraform files
-        id: tf_files
-        run: |
-          AWS_BACKEND_CONFIG_FILE="backendfiles/aws/backend.${TF_ENV}.conf"
-          AWS_TFVARS_FILE="envs/aws/${TF_ENV}.tfvars"
-          CLOUDFLARE_BACKEND_CONFIG_FILE="backendfiles/cloudflare/backend.${TF_ENV}.conf"
-          CLOUDFLARE_TFVARS_FILE="envs/cloudflare/${TF_ENV}.tfvars"
-
-          for FILE in \
-            "$AWS_BACKEND_CONFIG_FILE" \
-            "$AWS_TFVARS_FILE" \
-            "$CLOUDFLARE_BACKEND_CONFIG_FILE" \
-            "$CLOUDFLARE_TFVARS_FILE"
-          do
-            if [[ ! -f "$FILE" ]]; then
-              echo "::error::Terraform file not found: $FILE"
-              exit 1
-            fi
-          done
-
-          echo "aws_backend_config_file=$AWS_BACKEND_CONFIG_FILE" >> "$GITHUB_OUTPUT"
-          echo "aws_tfvars_file=$AWS_TFVARS_FILE" >> "$GITHUB_OUTPUT"
-          echo "cloudflare_backend_config_file=$CLOUDFLARE_BACKEND_CONFIG_FILE" >> "$GITHUB_OUTPUT"
-          echo "cloudflare_tfvars_file=$CLOUDFLARE_TFVARS_FILE" >> "$GITHUB_OUTPUT" 
 
       # Fetchig secrets from Bitwarden
       - name: Get Secrets
@@ -90,19 +67,20 @@ jobs:
           aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
 
-      # Destroy Cloudflare resources
-      - name: Terraform Init
+      # Destroy Cloudflare resources, target only website dns 
+      - name: Terraform Init -- target only website dns
         run: |
           terraform -chdir=stacks/cloudflare init \
           -reconfigure \
-          -backend-config="../../${{ steps.tf_files.outputs.cloudflare_backend_config_file }}"
+          -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
 
-      - name: Terraform Destroy Plan
+      - name: Terraform Destroy Plan -- target only website dns
         env:
             CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform -chdir=stacks/cloudflare plan -destroy \
-            -var-file="../../${{ steps.tf_files.outputs.cloudflare_tfvars_file }}" \
+            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
+            -target='module.website_dns' \
             -out=destroy.tfplan
 
       - name: Terraform Destroy
@@ -112,18 +90,18 @@ jobs:
           terraform -chdir=stacks/cloudflare apply -auto-approve \
             destroy.tfplan
 
-      # Destroy AWS resources
-      - name: Terraform Init
+      # Destroy AWS resources, target only website resources
+      - name: Terraform Init -- target only website resources
         run: |
           terraform -chdir=stacks/aws init \
           -reconfigure \
-          -backend-config="../../${{ steps.tf_files.outputs.aws_backend_config_file }}"
+          -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
 
-      - name: Terraform Destroy Plan
+      - name: Terraform Destroy Plan -- target only website resources
         run: |
           terraform -chdir=stacks/aws plan -destroy \
             -target='module.jitsi_web[0]' \
-            -var-file="../../${{ steps.tf_files.outputs.aws_tfvars_file }}" \
+            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
             -out=destroy.tfplan
 
       - name: Terraform Destroy

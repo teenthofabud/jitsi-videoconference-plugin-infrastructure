@@ -1,22 +1,4 @@
 
-resource "cloudflare_dns_record" "website_s3_cname" {
-  zone_id = local.zone_id
-  name    = var.website_dns_record_name
-  content = var.static_website_endpoint
-  type    = var.dns_record_type
-  proxied = var.cloudflare_record_proxied
-  ttl     = var.cloudflare_record_ttl
-}
-
-resource "cloudflare_dns_record" "api_lambda_cname" {
-  zone_id = local.zone_id
-  name    = var.api_dns_record_name
-  content = var.static_website_endpoint
-  type    = var.dns_record_type
-  proxied = var.cloudflare_record_proxied
-  ttl     = var.cloudflare_record_ttl
-}
-
 # resource "cloudflare_page_rule" "force_https" {
 #   zone_id = local.zone_id
 #   target  = var.page_rule_force_https_target #"http://www.yourdomain.com/*"
