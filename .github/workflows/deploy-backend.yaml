@@ -1,4 +1,4 @@
-name: Deploy Jitsi AWS resources for the static website and configure Cloudflare resources
+name: Deploy Jitsi AWS resources for backend and configure Cloudflare resources for backend
 
 on: 
   workflow_dispatch:
@@ -13,8 +13,12 @@ on:
           - prod
         default: dev
 
+concurrency:
+  group: jitsi-infra-${{ inputs.environment }}
+  cancel-in-progress: false
+
 jobs:
-  deploy-to-aws:
+  deploy-jitsi-backend-and-configure-cloudflare:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
@@ -29,32 +33,6 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Resolve the tfvars and backendfiles first
-      - name: Resolve Terraform files
-        id: tf_files
-        run: |
-          AWS_BACKEND_CONFIG_FILE="backendfiles/aws/backend.${TF_ENV}.conf"
-          AWS_TFVARS_FILE="envs/aws/${TF_ENV}.tfvars"
-          CLOUDFLARE_BACKEND_CONFIG_FILE="backendfiles/cloudflare/backend.${TF_ENV}.conf"
-          CLOUDFLARE_TFVARS_FILE="envs/cloudflare/${TF_ENV}.tfvars"
-
-          for FILE in \
-            "$AWS_BACKEND_CONFIG_FILE" \
-            "$AWS_TFVARS_FILE" \
-            "$CLOUDFLARE_BACKEND_CONFIG_FILE" \
-            "$CLOUDFLARE_TFVARS_FILE"
-          do
-            if [[ ! -f "$FILE" ]]; then
-              echo "::error::Terraform file not found: $FILE"
-              exit 1
-            fi
-          done
-
-          echo "aws_backend_config_file=$AWS_BACKEND_CONFIG_FILE" >> "$GITHUB_OUTPUT"
-          echo "aws_tfvars_file=$AWS_TFVARS_FILE" >> "$GITHUB_OUTPUT"
-          echo "cloudflare_backend_config_file=$CLOUDFLARE_BACKEND_CONFIG_FILE" >> "$GITHUB_OUTPUT"
-          echo "cloudflare_tfvars_file=$CLOUDFLARE_TFVARS_FILE" >> "$GITHUB_OUTPUT" 
 
       # Fetchig secrets from Bitwarden
       - name: Get Secrets
@@ -76,36 +54,38 @@ jobs:
           aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }} 
           aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
 
-      # AWS Terraform Execution
-      - name: Initialize AWS Terraform
+      # AWS Terraform Execution, target only backend resources
+      - name: Initialize AWS Terraform -- target only backend resources
         run: |
           terraform -chdir=stacks/aws init \
             -reconfigure \
-            -backend-config="../../${{ steps.tf_files.outputs.aws_backend_config_file }}"
+            -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
 
-      - name: Plan AWS Terraform
+      - name: Plan AWS Terraform -- target only backend resources
         run: |
           terraform -chdir=stacks/aws plan \
-            -var-file="../../${{ steps.tf_files.outputs.aws_tfvars_file }}" \
+            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
+            -target='module.jitsi_backend[0]' \
             -out=tfplan
 
       - name: Apply AWS Terraform
         run: |
           terraform -chdir=stacks/aws apply -auto-approve tfplan
 
-      # Cloudflare Terraform Execution
-      - name: Initialize Cloudflare Terraform
+      # Cloudflare Terraform Execution, target only backend dns
+      - name: Initialize Cloudflare Terraform -- target only backend dns
         run: |
           terraform -chdir=stacks/cloudflare init \
             -reconfigure \
-            -backend-config="../../${{ steps.tf_files.outputs.cloudflare_backend_config_file }}"
+            -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
 
-      - name: Plan Cloudflare Terraform
+      - name: Plan Cloudflare Terraform -- target only backend dns
         env:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform -chdir=stacks/cloudflare plan \
-            -var-file="../../${{ steps.tf_files.outputs.cloudflare_tfvars_file }}" \
+            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
+            -target='module.api_dns' \
             -out=tfplan
 
       - name: Apply Cloudflare Terraform
@@ -113,4 +93,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform -chdir=stacks/cloudflare apply -auto-approve tfplan
-          
+

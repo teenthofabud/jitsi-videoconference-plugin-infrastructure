@@ -1,4 +1,5 @@
 ## cdn
+
 variable "domain_name" {
   description = "The domain name to be used with Cloudflare."
   type        = string
@@ -6,43 +7,19 @@ variable "domain_name" {
 
 variable "static_website_endpoint" {
   description = "s3 static website endpoint"
-  type = string
-}
-
-variable "dns_record_name" {
-  description = "The name of the DNS record to create (e.g., www)."
-  type        = string
-  default     = "www"
-}
-
-variable "dns_record_type" {
-  description = "The type of DNS record to create (e.g., A, CNAME)."
-  type        = string
-  default     = "CNAME"
-}
-
-variable "cloudflare_record_proxied" {
-  description = "A boolean that indicates whether the record is receiving the performance and security benefits of Cloudflare."
-  type        = bool
-  default     = true
-}
-
-variable "cloudflare_record_ttl" {
-  description = "The TTL (time to live) for the DNS record."
-  type        = number
-  default     = 1
-}
-
-variable "page_rule_force_https_target" {
-  description = "The target URL pattern for the force HTTPS page rule."
   type        = string
 }
 
-variable "page_rule_force_https_priority" {
-  description = "The priority of the force HTTPS page rule."
-  type        = number
-  default     = 1
-}
+# variable "page_rule_force_https_target" {
+#   description = "The target URL pattern for the force HTTPS page rule."
+#   type        = string
+# }
+
+# variable "page_rule_force_https_priority" {
+#   description = "The priority of the force HTTPS page rule."
+#   type        = number
+#   default     = 1
+# }
 
 variable "page_rule_cache_all_target" {
   description = "The target URL pattern for the cache all page rule."
@@ -107,20 +84,20 @@ variable "rate_limit_mitigation_timeout" {
 ## Cloudflare worker
 variable "proxy_worker_name" {
   description = "Name for the cloudflare woker"
-  type = string
+  type        = string
 }
 
 variable "proxy_worker_module_name" {
   description = "Name of the module which exports the fetch method in the worker script"
-  type = string
+  type        = string
 }
 
 variable "proxy_worker_path" {
   description = "Path to the script for the cloudflare worker"
-  type = string
+  type        = string
 }
 
 variable "incoming_request_pattern_for_proxy" {
   description = "Pattern to match the incoming requests against"
-  type = string
+  type        = string
 }

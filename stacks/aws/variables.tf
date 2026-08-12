@@ -18,13 +18,19 @@ variable "use_local_mock" {
   type        = bool
 }
 
+variable "terraform_state_bucket" {
+  description = "tfstate bucket name of the Aiven stack"
+  type        = string
+}
+
 variable "deployments" {
   description = "Environment and region specific deployment configuration."
 
   type = map(object({
     features = object({
-      jitsi_web  = bool
-      jitsi_vpc  = bool
+      jitsi_web     = bool
+      jitsi_vpc     = bool
+      jitsi_backend = bool
     })
 
     jitsi_web = optional(object({
@@ -60,5 +66,48 @@ variable "deployments" {
       gh_actions_role_policy_name    = string
     }))
 
+    jitsi_backend = optional(object({
+      moderator = object({
+        function_name         = string
+        handler               = string
+        runtime               = string
+        architectures         = list(string)
+        memory_size           = number
+        timeout               = number
+        log_retention_in_days = number
+        tags                  = map(string)
+
+        function_url = optional(object({
+          auth_type         = string
+          invoke_mode       = string
+          allow_credentials = bool
+          allow_headers     = list(string)
+          allow_methods     = list(string)
+          allow_origins     = list(string)
+          expose_headers    = list(string)
+          max_age           = number
+        }))
+      })
+
+      db_ping = object({
+        function_name         = string
+        handler               = string
+        runtime               = string
+        architectures         = list(string)
+        memory_size           = number
+        timeout               = number
+        log_retention_in_days = number
+        tags                  = map(string)
+
+        schedule = optional(object({
+          expression                   = string
+          timezone                     = string
+          state                        = string
+          input                        = string
+          maximum_event_age_in_seconds = number
+          maximum_retry_attempts       = number
+        }))
+      })
+    }))
   }))
 }

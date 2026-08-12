@@ -1,0 +1,91 @@
+name: Destroy Jitis DB on Aiven
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to destroy"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+        default: dev
+
+      confirm_destroy:
+        description: "Type DESTROY to confirm"
+        required: true
+        type: string
+
+concurrency:
+  group: jitsi-infra-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  destroy-jitsi-db:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      TF_ENV: ${{ inputs.environment }}
+      TF_LOG: ${{ vars.TF_LOG_LEVEL }}
+
+    steps:
+      # Confirmation
+      - name: Validate destroy confirmation
+        run: |
+          if [[ "${{ inputs.confirm_destroy }}" != "DESTROY" ]]; then
+            echo "Destroy confirmation failed. Type DESTROY to proceed."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.6
+
+      # Fetchig secrets from Bitwarden
+      - name: Get Secrets
+        id: secrets
+        uses: bitwarden/sm-action@v3.0.0
+        with:
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
+          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
+          secrets: |
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_PERSONAL_TOKEN }} > AIVEN_ACCESS_TOKEN
+        
+        # AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
+
+      # Destroy Aiven resources
+      - name: Terraform Init 
+        env:
+          AIVEN_TOKEN: ${{ steps.secrets.outputs.AIVEN_ACCESS_TOKEN }}
+        run: |
+          terraform -chdir=stacks/aiven init \
+          -reconfigure \
+          -backend-config="../../backendfiles/aiven/backend.${TF_ENV}.conf"
+
+      - name: Terraform Destroy Plan 
+        env:
+          AIVEN_TOKEN: ${{ steps.secrets.outputs.AIVEN_ACCESS_TOKEN }}
+        run: |
+          terraform -chdir=stacks/aiven plan -destroy \
+            -var-file="../../envs/aiven/${TF_ENV}.tfvars" \
+            -out=destroy.tfplan
+
+      - name: Terraform Destroy
+        env:
+          AIVEN_TOKEN: ${{ steps.secrets.outputs.AIVEN_ACCESS_TOKEN }}
+        run: |
+          terraform -chdir=stacks/aiven apply -auto-approve \
+            destroy.tfplan

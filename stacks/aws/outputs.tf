@@ -37,3 +37,9 @@ output "jitsi_vpc_gateway_endpoint_id" {
   value       = try(module.jitsi_vpc[0].jitsi_vpc_gateway_endpoint_id, null)
 }
 
+#---- Jitsi Backend ------------
+
+output "jitsi_backend_moderator_function_url" {
+  description = "Function URL to invoke the jitsi-videoconference-moderator service lambda"
+  value       = try(module.jitsi_backend[0].moderator_function_url, null)
+}
