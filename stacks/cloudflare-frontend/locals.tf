@@ -15,7 +15,7 @@ locals {
   api_endpoint                 = data.terraform_remote_state.aws.outputs.jitsi_backend_moderator_function_url
   cdn_config                   = var.config.cdn
   domain_name                  = var.config.domain_name
-  page_rule_force_https_target = "http://${local.domain_name}/*"
+  page_rule_force_https_target = "http://${var.config.cdn.website_dns_record_name}.${local.domain_name}/*"
 
   context = {
     project_name = var.project_name
