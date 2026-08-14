@@ -1,4 +1,5 @@
-name: Destroy Jitis DB on Aiven
+name: Destroy Database
+description: Destroy Jitis DB on Aiven
 on:
   workflow_dispatch:
     inputs:
