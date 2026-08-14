@@ -65,7 +65,7 @@ deployments = {
           allow_credentials = false
           allow_headers     = ["content-type", "authorization"]
           allow_methods     = ["POST"]
-          allow_origins     = ["https://www.jitsi.dpdns.org/"]
+          allow_origins     = ["https://www.jitsi.dpdns.org"]
           expose_headers    = []
           max_age           = 300
         }
