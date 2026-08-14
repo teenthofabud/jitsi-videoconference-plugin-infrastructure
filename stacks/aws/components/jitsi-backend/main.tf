@@ -13,6 +13,7 @@ module "moderator_lambda" {
   timeout                      = var.config.moderator.timeout
   environment_variables        = local.aiven_database_environment_variables
   log_retention_in_days        = var.config.moderator.log_retention_in_days
+  environment = var.context.environment
 
   lambda_execution_policy_path = "${path.module}/policies/moderator-execution-policy.json"
 
