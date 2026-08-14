@@ -10,15 +10,10 @@ data "terraform_remote_state" "aws" {
 }
 
 locals {
-
-  static_web_endpoint          = data.terraform_remote_state.aws.outputs.static_web_endpoint
   api_endpoint                 = data.terraform_remote_state.aws.outputs.jitsi_backend_moderator_function_url
-  cloudflare_config            = var.config
-  cdn_config                   = local.cloudflare_config.cdn
-  rate_limit_config            = local.cloudflare_config.rate_limit
-  domain_name                  = local.cloudflare_config.domain_name
-  # page_rule_force_https_target = "http://example.com/*"
-  page_rule_cache_all_target   = "*.${local.domain_name}/*"
+  rate_limit_config            = var.config.rate_limit
+  domain_name                  = var.config.domain_name
+  page_rule_force_https_target = "http://${var.config.cdn.api_dns_record_name}.${local.domain_name}/*"
 
   context = {
     project_name = var.project_name
