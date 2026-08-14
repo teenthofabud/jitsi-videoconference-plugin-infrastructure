@@ -13,6 +13,11 @@ variable "plan" {
   type        = string
 }
 
+variable "db_cloud_name" {
+  description = "Cloud provider and the desired region in the format {provider-region}, Eg:- do-fra --> digital ocean, Frankfurt"
+  type = string
+}
+
 variable "tech_emails" {
   description = "Email addresses that receive technical alerts and service updates."
   type        = set(string)
@@ -24,3 +29,5 @@ variable "termination_protection" {
   type        = bool
   default     = true
 }
+
+
