@@ -29,6 +29,11 @@ variable "lambda_function_name" {
   type        = string
 }
 
+variable "environment" {
+  type = string
+  description = "Deployment environment."
+}
+
 variable "description" {
   description = "Description of the Lambda function."
   type        = string
