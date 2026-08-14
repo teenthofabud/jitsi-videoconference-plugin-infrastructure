@@ -4,5 +4,5 @@ plan          = "free-1-1gb"
 tech_emails = [
   "shahadneeliyatt786@gmail.com",
 ]
-
+db_cloud_name = "do-fra"
 termination_protection = false
