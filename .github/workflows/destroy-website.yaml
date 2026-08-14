@@ -1,5 +1,5 @@
-name: Destroy AWS resources for website and corresponding Cloudflare configurations
-
+name: Destroy Frontend
+description: Destroy AWS resources for website and corresponding Cloudflare configurations
 on:
   workflow_dispatch:
     inputs:

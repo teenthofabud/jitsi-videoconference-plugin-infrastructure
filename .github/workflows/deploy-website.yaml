@@ -1,4 +1,5 @@
-name: Deploy Jitsi AWS resources for the static website and configure Cloudflare resources for website
+name: Deploy Frontend
+description: Deploy Jitsi AWS resources for the static website and configure Cloudflare resources for website
 
 on: 
   workflow_dispatch:

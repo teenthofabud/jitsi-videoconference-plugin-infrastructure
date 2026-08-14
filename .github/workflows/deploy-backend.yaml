@@ -1,5 +1,5 @@
-name: Deploy Jitsi AWS resources for backend and configure Cloudflare resources for backend
-
+name: Deploy Backend
+description: Deploy Jitsi AWS resources for backend and configure Cloudflare resources for backend
 on: 
   workflow_dispatch:
     inputs:

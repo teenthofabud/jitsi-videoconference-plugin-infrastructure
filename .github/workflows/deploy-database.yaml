@@ -1,4 +1,5 @@
-name: Configure Aiven Postgres DB
+name: Deploy Database
+description: Configure Aiven Postgres DB
 
 on: 
   workflow_dispatch:
