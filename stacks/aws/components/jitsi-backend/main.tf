@@ -49,7 +49,8 @@ module "db_ping_lambda" {
   timeout                      = var.config.db_ping.timeout
   environment_variables        = local.aiven_database_environment_variables
   log_retention_in_days        = var.config.db_ping.log_retention_in_days
-
+  environment = var.context.environment
+  
   lambda_execution_policy_path = "${path.module}/policies/db-ping-execution-policy.json"
 
   enable_function_url = false
