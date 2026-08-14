@@ -70,24 +70,23 @@ jobs:
       # Destroy Cloudflare resources, target only backend dns 
       - name: Terraform Init -- target only backend dns
         run: |
-          terraform -chdir=stacks/cloudflare init \
+          terraform -chdir=stacks/cloudflare-backend init \
           -reconfigure \
-          -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
+          -backend-config="../../backendfiles/cloudflare-backend/backend.${TF_ENV}.conf"
 
       - name: Terraform Destroy Plan -- target only backend dns
         env:
             CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
-          terraform -chdir=stacks/cloudflare plan -destroy \
-            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
-            -target='module.api_dns' \
+          terraform -chdir=stacks/cloudflare-backend plan -destroy \
+            -var-file="../../envs/cloudflare-backend/${TF_ENV}.tfvars" \
             -out=destroy.tfplan
 
       - name: Terraform Destroy
         env:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
-          terraform -chdir=stacks/cloudflare apply -auto-approve \
+          terraform -chdir=stacks/cloudflare-backend apply -auto-approve \
             destroy.tfplan
 
       # Destroy AWS resources, target only backend resources

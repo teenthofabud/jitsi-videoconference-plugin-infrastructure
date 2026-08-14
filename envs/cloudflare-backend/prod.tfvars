@@ -1,0 +1,21 @@
+project_name           = "toab-jitsi"
+aws_region             = "eu-central-1"
+environment            = "prod"
+terraform_state_bucket = "toab-jitsi-infrastructure-prod-414772275073-eu-central-1-an"
+config = {
+  domain_name = "example.com"
+  cdn = {
+    api_dns_record_name                = "api"
+    dns_record_type                    = "CNAME"
+    cloudflare_record_proxied          = true
+    cloudflare_record_ttl              = 1
+    page_rule_force_https_priority     = 1
+  }
+
+  rate_limit = {
+    period              = 60
+    requests_per_period = 100
+    mitigation_timeout  = 60
+  }
+}
+    

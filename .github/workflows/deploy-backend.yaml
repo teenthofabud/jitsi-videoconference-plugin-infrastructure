@@ -75,22 +75,21 @@ jobs:
       # Cloudflare Terraform Execution, target only backend dns
       - name: Initialize Cloudflare Terraform -- target only backend dns
         run: |
-          terraform -chdir=stacks/cloudflare init \
+          terraform -chdir=stacks/cloudflare-backend init \
             -reconfigure \
-            -backend-config="../../backendfiles/cloudflare/backend.${TF_ENV}.conf"
+            -backend-config="../../backendfiles/cloudflare-backend/backend.${TF_ENV}.conf"
 
       - name: Plan Cloudflare Terraform -- target only backend dns
         env:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
-          terraform -chdir=stacks/cloudflare plan \
-            -var-file="../../envs/cloudflare/${TF_ENV}.tfvars" \
-            -target='module.api_dns' \
+          terraform -chdir=stacks/cloudflare-backend plan \
+            -var-file="../../envs/cloudflare-backend/${TF_ENV}.tfvars" \
             -out=tfplan
 
       - name: Apply Cloudflare Terraform
         env:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
-          terraform -chdir=stacks/cloudflare apply -auto-approve tfplan
+          terraform -chdir=stacks/cloudflare-backend apply -auto-approve tfplan
 

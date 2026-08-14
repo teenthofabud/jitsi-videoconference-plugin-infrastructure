@@ -1,14 +1,12 @@
-data "cloudflare_zone" "domain" {
-  filter = {
-    name = var.domain_name
+
+resource "cloudflare_page_rule" "force_https" {
+  zone_id = local.zone_id
+  target  = var.page_rule_force_https_target #"http://www.yourdomain.com/*"
+  actions = {
+    always_use_https = true
   }
+  priority = var.page_rule_force_https_priority
 }
-
-locals {
-  zone_id    = data.cloudflare_zone.domain.id
-  account_id = data.cloudflare_zone.domain.account.id
-}
-
 
 resource "cloudflare_dns_record" "api_lambda_cname" {
   zone_id = local.zone_id

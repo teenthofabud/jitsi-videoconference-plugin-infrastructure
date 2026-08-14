@@ -5,16 +5,11 @@ terraform_state_bucket = "toab-jitsi-infrastructure-dev-414772275073-eu-central-
 config = {
   domain_name = "jitsi.dpdns.org"
   cdn = {
-    website_dns_record_name            = "www"
     api_dns_record_name                = "api"
     dns_record_type                    = "CNAME"
     cloudflare_record_proxied          = true
     cloudflare_record_ttl              = 1
-    enable_cache_page_rule             = false
     page_rule_force_https_priority     = 1
-    page_rule_cache_all_cache_level    = "cache_everything"
-    page_rule_cache_all_edge_cache_ttl = 2419200,
-    page_rule_cache_all_priority       = 2
   }
 
   rate_limit = {
@@ -23,16 +18,4 @@ config = {
     mitigation_timeout  = 10
   }
 
-  unauthorized_port = {
-    allowed_ports = [80, 443]
-  }
-
-  geo_block = {
-    block_locations = ["RU", "CN", "KP"]
-  }
-
-  worker = {
-    proxy_worker_name                  = "proxy-worker"
-    incoming_request_pattern_for_proxy = "www.jitsi.dpdns.org/*"
-  }
 }

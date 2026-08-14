@@ -8,14 +8,6 @@ resource "cloudflare_ruleset" "zone_custom_firewall" {
 
   rules = [
     {
-      ref         = "block_non_default_ports"
-      description = "Block ports other than allowed HTTP/HTTPS ports."
-      # join() will produce something like "80 443"
-      expression = "(not cf.edge.server_port in {${join(" ", var.allowed_ports)}})"
-      action     = "block"
-      enabled    = true
-    },
-    {
       ref         = "geo_block_selected_countries"
       description = "Block traffic from selected countries."
       # join() will produce something like \"RU\" \"CN\" \"KP\"
