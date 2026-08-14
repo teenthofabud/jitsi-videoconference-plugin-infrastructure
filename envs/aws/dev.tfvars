@@ -75,7 +75,7 @@ deployments = {
       }
 
       db_ping = {
-        function_name         = "toab-jitsi-db-ping-dev"
+        function_name         = "toab-jitsi-db-ping"
         handler               = "bootstrap"
         runtime               = "provided.al2023"
         architectures         = ["arm64"]
