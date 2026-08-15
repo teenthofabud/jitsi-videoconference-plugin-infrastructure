@@ -56,9 +56,9 @@ module "db_ping_lambda" {
   enable_function_url = false
 
   enable_schedule              = true
-  schedule_name                = "${var.config.db_ping.function_name}-execution-${var.context.environment}"
-  scheduler_role_name          = "${var.config.db_ping.function_name}-execution-role-${var.context.environment}"
-  scheduler_policy_name        = "${var.config.db_ping.function_name}-execution-policy-${var.context.environment}"
+  schedule_name                = "${var.config.db_ping.function_name}-scheduler-${var.context.environment}"
+  scheduler_role_name          = "${var.config.db_ping.function_name}-scheduler-role-${var.context.environment}"
+  scheduler_policy_name        = "${var.config.db_ping.function_name}-scheduler-policy-${var.context.environment}"
   schedule_description         = "Scheduled at every 12h to ping Aiven db to keep it alive"
   schedule_expression          = var.config.db_ping.schedule.expression
   schedule_timezone            = var.config.db_ping.schedule.timezone
