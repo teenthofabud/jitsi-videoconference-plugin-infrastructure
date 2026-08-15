@@ -67,14 +67,14 @@ jobs:
           aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
 
-      # Destroy Cloudflare resources, target only backend dns 
-      - name: Terraform Init -- target only backend dns
+      # Destroy Cloudflare resources, target only backend resources 
+      - name: Terraform Init -- target only backend resources
         run: |
           terraform -chdir=stacks/cloudflare-backend init \
           -reconfigure \
           -backend-config="../../backendfiles/cloudflare-backend/backend.${TF_ENV}.conf"
 
-      - name: Terraform Destroy Plan -- target only backend dns
+      - name: Terraform Destroy Plan -- target only backend resources
         env:
             CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
