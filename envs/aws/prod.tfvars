@@ -84,7 +84,7 @@ deployments = {
         log_retention_in_days = 7
 
         schedule = {
-          expression                   = "rate(12 hours)"
+          expression                   = "rate(6 hours)"
           timezone                     = "UTC"
           state                        = "ENABLED"
           input                        = "{}"
