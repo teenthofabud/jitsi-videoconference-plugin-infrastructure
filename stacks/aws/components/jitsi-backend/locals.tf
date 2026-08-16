@@ -11,8 +11,11 @@ data "terraform_remote_state" "aiven" {
 
 locals {
   raw_uri      = data.terraform_remote_state.aiven.outputs.service_uri
-  stripped_uri = replace(replace(local.raw_uri, "postgresql://", ""), "postgres://", "")
-  aiven_db_uri = "jdbc:postgresql://${local.stripped_uri}"
+  # Remove "postgres://" or "postgresql://" if present
+  no_proto     = replace(replace(local.raw_uri, "postgresql://", ""), "postgres://", "")
+  # If the URI contains user credentials (separated by '@'), strip everything before the '@'
+  clean_host   = strcontains(local.no_proto, "@") ? element(split("@", local.no_proto), 1) : local.no_proto
+  aiven_db_uri = "jdbc:postgresql://${local.clean_host}"
 
   aiven_database_environment_variables = {
     DB_HOST     = data.terraform_remote_state.aiven.outputs.service_host
