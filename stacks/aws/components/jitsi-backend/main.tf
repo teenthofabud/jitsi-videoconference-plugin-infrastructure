@@ -37,7 +37,7 @@ module "moderator_lambda" {
 
 module "db_ping_lambda" {
   source = "../../modules/aws/lambda"
-
+  
   lambda_function_name         = "${var.config.db_ping.function_name}-${var.context.environment}"
   lambda_execution_role_name   = "${var.config.db_ping.function_name}-execution-role-${var.context.environment}"
   lambda_execution_policy_name = "${var.config.db_ping.function_name}-execution-policy-${var.context.environment}"

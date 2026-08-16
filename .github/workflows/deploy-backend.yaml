@@ -72,14 +72,14 @@ jobs:
         run: |
           terraform -chdir=stacks/aws apply -auto-approve tfplan
 
-      # Cloudflare Terraform Execution, target only backend dns
-      - name: Initialize Cloudflare Terraform -- target only backend dns
+      # Cloudflare Terraform Execution, target only backend resources
+      - name: Initialize Cloudflare Terraform -- target only backend resources
         run: |
           terraform -chdir=stacks/cloudflare-backend init \
             -reconfigure \
             -backend-config="../../backendfiles/cloudflare-backend/backend.${TF_ENV}.conf"
 
-      - name: Plan Cloudflare Terraform -- target only backend dns
+      - name: Plan Cloudflare Terraform -- target only backend resources
         env:
           CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
         run: |
