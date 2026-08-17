@@ -70,12 +70,12 @@ deployments = {
           max_age           = 300
         }
         tags = {
-          Component = "toab-jitsi-moderator-service-lambda-dev"
+          Component = "toab-jitsi-moderator-service-lambda-prod"
         }
       }
 
       db_ping = {
-        function_name         = "toab-jitsi-db-ping-dev"
+        function_name         = "toab-aiven-service-ping-prod"
         handler               = "bootstrap"
         runtime               = "provided.al2023"
         architectures         = ["x86_64"]
@@ -84,7 +84,7 @@ deployments = {
         log_retention_in_days = 7
 
         schedule = {
-          expression                   = "rate(6 hours)"
+          expression                   = "rate(30 minutes)"
           timezone                     = "UTC"
           state                        = "ENABLED"
           input                        = "{}"
@@ -92,7 +92,7 @@ deployments = {
           maximum_retry_attempts       = 0
         }
         tags = {
-          Component = "toab-jitsi-aiven-db-ping-lambda-dev"
+          Component = "toab-aiven-service-ping-lambda-prod"
         }
       }
     }
