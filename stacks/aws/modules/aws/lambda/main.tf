@@ -61,6 +61,7 @@ resource "aws_lambda_function_url" "this" {
   }
 }
 
+
 resource "aws_lambda_permission" "function_url_public" {
   count = (
     var.enable_function_url &&
@@ -73,6 +74,21 @@ resource "aws_lambda_permission" "function_url_public" {
   principal              = "*"
   function_url_auth_type = "NONE"
 }
+
+
+resource "aws_lambda_permission" "function_url_public_invoke" {
+  count = (
+    var.enable_function_url &&
+    var.function_url_auth_type == "NONE"
+  ) ? 1 : 0
+
+  statement_id             = "AllowPublicFunctionInvoke"
+  action                   = "lambda:InvokeFunction"
+  function_name            = aws_lambda_function.this.function_name
+  principal                = "*"
+  invoked_via_function_url = true 
+}
+
 
 resource "aws_scheduler_schedule" "this" {
   count = var.enable_schedule ? 1 : 0
