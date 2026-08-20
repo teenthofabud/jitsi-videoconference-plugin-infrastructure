@@ -25,4 +25,9 @@ locals {
     DB_PASSWORD = data.terraform_remote_state.aiven.outputs.service_password
     DB_URI      = local.aiven_db_uri
   }
+
+  auth0_environment_variables = {
+    AUTH0_API_IDENTIFIER = var.config.auth0.api_identifier
+    AUTH0_DOMAIN = var.config.auth0.domain
+  }
 }

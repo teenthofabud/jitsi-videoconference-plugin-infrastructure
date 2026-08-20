@@ -95,6 +95,11 @@ deployments = {
           Component = "toab-aiven-service-ping-lambda-dev"
         }
       }
+
+      auth0 = {
+        api_identifier = toab-jitsi
+        domain = teenthofabud-dev.eu.auth0.com
+      }
     }
 
   }
