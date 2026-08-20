@@ -11,7 +11,10 @@ module "moderator_lambda" {
   architectures                = var.config.moderator.architectures
   memory_size                  = var.config.moderator.memory_size
   timeout                      = var.config.moderator.timeout
-  environment_variables        = local.aiven_database_environment_variables
+  environment_variables        = merge(
+                                    local.aiven_database_environment_variables,
+                                    local.auth0_environment_variables
+                                )
   log_retention_in_days        = var.config.moderator.log_retention_in_days
   environment = var.context.environment
 
