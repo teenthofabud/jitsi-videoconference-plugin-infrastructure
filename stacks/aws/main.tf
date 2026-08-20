@@ -23,6 +23,7 @@ module "jitsi_backend" {
   config = {
     moderator = local.deployment_config.jitsi_backend.moderator
     db_ping   = local.deployment_config.jitsi_backend.db_ping
+    auth0 = local.deployment_config.jitsi_backend.auth0
   }
 }
 
