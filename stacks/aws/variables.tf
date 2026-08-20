@@ -108,6 +108,11 @@ variable "deployments" {
           maximum_retry_attempts       = number
         }))
       })
+
+      auth0 = object({
+        domain = string
+        api_identifier = string
+      })
     }))
   }))
 }
