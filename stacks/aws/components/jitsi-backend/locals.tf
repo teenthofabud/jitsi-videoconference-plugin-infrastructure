@@ -17,16 +17,18 @@ locals {
   clean_host   = strcontains(local.no_proto, "@") ? element(split("@", local.no_proto), 1) : local.no_proto
   aiven_db_uri = "jdbc:postgresql://${local.clean_host}"
 
-  aiven_database_environment_variables = {
-    DB_HOST     = data.terraform_remote_state.aiven.outputs.service_host
-    DB_PORT     = tostring(data.terraform_remote_state.aiven.outputs.service_port)
-    DB_NAME     = data.terraform_remote_state.aiven.outputs.database_name
+  aiven_service_ping_environment_variables = {
     DB_USERNAME = data.terraform_remote_state.aiven.outputs.service_username
     DB_PASSWORD = data.terraform_remote_state.aiven.outputs.service_password
     DB_URI      = local.aiven_db_uri
   }
 
-  auth0_environment_variables = {
+  moderator_service_environment_variables = {
+    JITSI_DB_USERNAME = data.terraform_remote_state.aiven.outputs.service_username
+    JITSI_DB_PASSWORD = data.terraform_remote_state.aiven.outputs.service_password
+    JITSI_DB_URL      = local.aiven_db_uri
+    JITSI_DB_DIALECT  = "org.hibernate.dialect.PostgreSQLDialect"
+    JITSI_DB_DRIVER_CLASS = "org.postgresql.Driver"
     AUTH0_API_IDENTIFIER = var.config.auth0.api_identifier
     AUTH0_DOMAIN = var.config.auth0.domain
   }

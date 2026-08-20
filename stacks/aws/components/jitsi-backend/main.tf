@@ -11,10 +11,7 @@ module "moderator_lambda" {
   architectures                = var.config.moderator.architectures
   memory_size                  = var.config.moderator.memory_size
   timeout                      = var.config.moderator.timeout
-  environment_variables        = merge(
-                                    local.aiven_database_environment_variables,
-                                    local.auth0_environment_variables
-                                )
+  environment_variables        = local.moderator_service_environment_variables
   log_retention_in_days        = var.config.moderator.log_retention_in_days
   environment = var.context.environment
 
@@ -50,7 +47,7 @@ module "db_ping_lambda" {
   architectures                = var.config.db_ping.architectures
   memory_size                  = var.config.db_ping.memory_size
   timeout                      = var.config.db_ping.timeout
-  environment_variables        = local.aiven_database_environment_variables
+  environment_variables        = local.aiven_service_ping_environment_variables
   log_retention_in_days        = var.config.db_ping.log_retention_in_days
   environment = var.context.environment
   
