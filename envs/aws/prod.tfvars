@@ -97,8 +97,8 @@ deployments = {
       }
 
       auth0 = {
-        api_identifier = toab-jitsi
-        domain = teenthofabud-prod.eu.auth0.com
+        api_identifier = "toab-jitsi"
+        domain = "teenthofabud-prod.eu.auth0.com"
       }
     }
 
