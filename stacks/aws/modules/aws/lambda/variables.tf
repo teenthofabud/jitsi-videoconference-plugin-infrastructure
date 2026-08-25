@@ -22,6 +22,11 @@ variable "scheduler_policy_name" {
   default     = null
 }
 
+variable "layers" {
+  description = "Lambda layers"
+  type = list(string)
+  default = []
+}
 #--------- Lambda -----------
 
 variable "lambda_function_name" {
