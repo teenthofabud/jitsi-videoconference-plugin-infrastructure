@@ -17,6 +17,7 @@ resource "aws_lambda_function" "this" {
   architectures    = var.architectures
   memory_size      = var.memory_size
   timeout          = var.timeout
+  layers = var.layers
 
   dynamic "environment" {
     for_each = length(var.environment_variables) > 0 ? [1] : []
