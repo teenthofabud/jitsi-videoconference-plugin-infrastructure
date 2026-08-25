@@ -13,6 +13,9 @@ module "moderator_lambda" {
   timeout                      = var.config.moderator.timeout
   environment_variables        = local.moderator_service_environment_variables
   log_retention_in_days        = var.config.moderator.log_retention_in_days
+  layers = [
+    "arn:aws:lambda:${var.context.aws_region}:753240598075:layer:LambdaAdapterLayerX86:23"
+  ]
   environment = var.context.environment
 
   lambda_execution_policy_path = "${path.module}/policies/moderator-execution-policy.json"
