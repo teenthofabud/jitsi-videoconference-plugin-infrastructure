@@ -87,6 +87,11 @@ variable "deployments" {
           expose_headers    = list(string)
           max_age           = number
         }))
+
+        spring_config = optional(object({
+          hikari_max_pool_size = number
+          hikari_min_idle_count = number
+        }))
       })
 
       db_ping = object({
