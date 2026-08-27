@@ -63,5 +63,17 @@ variable "config" {
       domain = string
       api_identifier = string
     })
+
+    moderator_db_config = object({
+      username = string
+      password = string
+      url = string 
+    })
+
+    aiven_ping_db_config = object({
+      username = string
+      password = string
+      url = string 
+    })
   })
 }

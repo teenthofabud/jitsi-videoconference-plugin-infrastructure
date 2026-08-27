@@ -116,3 +116,19 @@ variable "deployments" {
     }))
   }))
 }
+
+variable "moderator_db_config" {
+  type = object({
+    username = string
+    password = string
+    url = string 
+  })
+}
+
+variable "aiven_ping_db_config" {
+  type = object({
+    username = string
+    password = string
+    url = string 
+  })
+}
