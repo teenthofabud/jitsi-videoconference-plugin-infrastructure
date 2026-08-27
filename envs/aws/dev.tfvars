@@ -69,6 +69,12 @@ deployments = {
           expose_headers    = []
           max_age           = 300
         }
+
+        spring_config = {
+          hikari_max_pool_size = 2
+          hikari_min_idle_count = 1
+        }
+
         tags = {
           Component = "toab-jitsi-moderator-service-lambda-dev"
         }

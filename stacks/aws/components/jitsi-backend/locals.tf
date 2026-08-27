@@ -14,5 +14,7 @@ locals {
     JITSI_DB_DRIVER_CLASS = "org.postgresql.Driver"
     AUTH0_API_IDENTIFIER = var.config.auth0.api_identifier
     AUTH0_DOMAIN = var.config.auth0.domain
+    JITSI_HIKARI_MAX_POOL_SIZE = var.config.moderator.spring_config.hikari_max_pool_size
+    JITSI_HIKARI_MIN_IDLE_COUNT = var.config.moderator.spring_config.hikari_min_idle_count
   }
 }

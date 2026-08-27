@@ -91,6 +91,12 @@ deployments = {
           maximum_event_age_in_seconds = 3600
           maximum_retry_attempts       = 0
         }
+
+        spring_config = {
+          hikari_max_pool_size = 2
+          hikari_min_idle_count = 1
+        }
+        
         tags = {
           Component = "toab-aiven-service-ping-lambda-prod"
         }
