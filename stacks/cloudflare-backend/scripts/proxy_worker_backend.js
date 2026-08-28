@@ -12,11 +12,14 @@ export default {
     targetUrl.pathname = incomingUrl.pathname;
     targetUrl.search = incomingUrl.search;
     
+    
     // Clone the request to modify the headers
     const proxyRequest = new Request(targetUrl, request);
     
     // THE FIX: Overwrite the Host header to match AWS
     proxyRequest.headers.set("Host", targetUrl.hostname);
+    proxyRequest.headers.set("X-Forwarded-Host", incomingUrl.hostname);
+    proxyRequest.headers.set("X-Forwarded-Proto", "https");
     
     // Forward the modified request to Lambda and return the response
     return fetch(proxyRequest);
