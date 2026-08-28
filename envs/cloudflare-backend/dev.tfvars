@@ -17,5 +17,11 @@ config = {
     requests_per_period = 100
     mitigation_timeout  = 10
   }
+  
+  worker = {
+    proxy_worker_name                  = "proxy-worker-backend"
+    incoming_request_pattern_for_proxy = "api.jitsi.dpdns.org/*"
+  }
+
 
 }

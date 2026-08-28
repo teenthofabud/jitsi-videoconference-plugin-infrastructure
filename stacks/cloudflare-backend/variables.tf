@@ -36,6 +36,11 @@ variable "config" {
       requests_per_period = optional(number, 100)
       mitigation_timeout  = optional(number, 60)
     })
+
+    worker = object({
+      proxy_worker_name                  = string
+      incoming_request_pattern_for_proxy = string
+    })
   })
 
 }
