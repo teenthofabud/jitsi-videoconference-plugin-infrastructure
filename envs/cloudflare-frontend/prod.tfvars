@@ -17,7 +17,7 @@ config = {
   }
 
   worker = {
-    proxy_worker_name                  = "proxy-worker"
+    proxy_worker_name                  = "proxy-worker-website"
     incoming_request_pattern_for_proxy = "www.toab-jitsi*"
   }
 }

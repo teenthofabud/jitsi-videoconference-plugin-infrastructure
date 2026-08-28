@@ -18,6 +18,12 @@ module "cloudflare_backend" {
   rate_limit_mitigation_timeout  = local.rate_limit_config.mitigation_timeout
   rate_limit_requests_per_period = local.rate_limit_config.requests_per_period
 
+  # Worker
+  proxy_worker_name                  = var.config.worker.proxy_worker_name
+  proxy_worker_module_name           = "proxy_worker_backend.js"
+  proxy_worker_path                  = "${path.module}/scripts/proxy_worker_backend.js"
+  incoming_request_pattern_for_proxy = var.config.worker.incoming_request_pattern_for_proxy
+
 }
 
 
