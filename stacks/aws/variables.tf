@@ -128,6 +128,7 @@ variable "moderator_db_config" {
     password = string
     url = string 
   })
+  sensitive = true
 }
 
 variable "aiven_ping_db_config" {
@@ -136,4 +137,5 @@ variable "aiven_ping_db_config" {
     password = string
     url = string 
   })
+  sensitive = true
 }
