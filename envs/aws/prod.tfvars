@@ -56,7 +56,7 @@ deployments = {
         runtime               = "provided.al2023"
         architectures         = ["x86_64"]
         memory_size           = 256
-        timeout               = 30
+        timeout               = 300
         log_retention_in_days = 7
 
         function_url = {
@@ -80,7 +80,7 @@ deployments = {
         runtime               = "provided.al2023"
         architectures         = ["x86_64"]
         memory_size           = 128
-        timeout               = 15
+        timeout               = 200
         log_retention_in_days = 7
 
         schedule = {
