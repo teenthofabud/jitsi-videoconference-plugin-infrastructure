@@ -24,7 +24,7 @@ resource "cloudflare_worker_version" "proxy_worker_version" {
     {
       name = "LAMBDA_FUNCTIONAL_URL"
       type = "plain_text"
-      text = "http://${var.api_endpoint}"
+      text = "${var.api_endpoint}"
     }
   ]
 
