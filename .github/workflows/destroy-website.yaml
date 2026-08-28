@@ -58,7 +58,9 @@ jobs:
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
             ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
-        
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_MODERATOR_SERVICE_DATABASE_PARAMS }} > MODERATOR_SERVICE_DB_ENV
+            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_AIVEN_SERVICE_DATABASE_PARAMS }} > AIVEN_SERVICE_DB_ENV
+
         # AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
@@ -97,6 +99,9 @@ jobs:
           -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
 
       - name: Terraform Destroy Plan -- target only website resources
+        env:
+          TF_VAR_moderator_db_config: ${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_ENV }}
+          TF_VAR_aiven_ping_db_config: ${{ steps.secrets.outputs.AIVEN_SERVICE_DB_ENV }}
         run: |
           terraform -chdir=stacks/aws plan -destroy \
             -target='module.jitsi_web[0]' \
