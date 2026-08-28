@@ -46,8 +46,30 @@ jobs:
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
             ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
-            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_MODERATOR_SERVICE_DATABASE_PARAMS }} > MODERATOR_SERVICE_DB_ENV
-            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_AIVEN_SERVICE_DATABASE_PARAMS }} > AIVEN_SERVICE_DB_ENV
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_URL }} > AIVEN_SERVICE_DB_URL
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
+            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_PASSWORD }} > MODERATOR_SERVICE_DB_PASSWORD
+            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_URL }} > MODERATOR_SERVICE_DB_URL
+            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_USERNAME }} > MODERATOR_SERVICE_DB_USERNAME
+
+      # create a tfvars json file with db credentials for both lambdas and inject 'em to terraform
+      - name: Create Secrets File
+        run: |
+          cat << EOF > stacks/aws/secrets.auto.tfvars.json
+          {
+            "moderator_db_config": {
+              "username": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_USERNAME }}",
+              "password": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_PASSWORD }}",
+              "url": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_URL }}"
+            },
+            "aiven_ping_db_config": {
+              "username": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_USERNAME }}",
+              "password": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_PASSWORD }}",
+              "url": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_URL }}"
+            }
+          }
+          EOF
 
       # AWS Credentials
       - name: Configure AWS Credentials
@@ -65,9 +87,6 @@ jobs:
             -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
 
       - name: Plan AWS Terraform -- target only website resources
-        env:
-          TF_VAR_moderator_db_config: ${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_ENV }}
-          TF_VAR_aiven_ping_db_config: ${{ steps.secrets.outputs.AIVEN_SERVICE_DB_ENV }}
         run: |
           terraform -chdir=stacks/aws plan \
             -var-file="../../envs/aws/${TF_ENV}.tfvars" \
