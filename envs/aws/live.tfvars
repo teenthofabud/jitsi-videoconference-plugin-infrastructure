@@ -1,8 +1,8 @@
 project_name           = "toab-jitsi"
 aws_region             = "eu-central-1"
 use_local_mock         = false
-environment            = "prod"
-terraform_state_bucket = "toab-jitsi-infrastructure-prod-414772275073-eu-central-1-an"
+environment            = "live"
+terraform_state_bucket = "toab-jitsi-infrastructure-live-414772275073-eu-central-1-an"
 deployments = {
   eu-central-1 = {
 
@@ -21,7 +21,7 @@ deployments = {
       enable_website     = true
       enable_public_read = false
       tags = {
-        Component = "jitsi-web-prod"
+        Component = "jitsi-web-live"
       }
     }
 
@@ -29,14 +29,14 @@ deployments = {
       vpc = {
         cidr = "10.20.0.0/16"
         tags = {
-          Component = "jitsi-vpc-prod"
+          Component = "jitsi-vpc-live"
         }
       }
 
       subnet = {
         cidr = "10.20.1.0/24"
         tags = {
-          Component = "jitsi-subnet-prod"
+          Component = "jitsi-subnet-live"
         }
       }
 
@@ -44,7 +44,7 @@ deployments = {
         service_name    = "s3"
         route_table_ids = []
         tags = {
-          Component = "jitsi-gateway-endpoint-prod"
+          Component = "jitsi-gateway-endpoint-live"
         }
       }
     }
@@ -70,12 +70,12 @@ deployments = {
           max_age           = 300
         }
         tags = {
-          Component = "toab-jitsi-moderator-service-lambda-prod"
+          Component = "toab-jitsi-moderator-service-lambda-live"
         }
       }
 
       db_ping = {
-        function_name         = "toab-aiven-service-ping-prod"
+        function_name         = "toab-aiven-service-ping-live"
         handler               = "bootstrap"
         runtime               = "provided.al2023"
         architectures         = ["x86_64"]
@@ -98,13 +98,13 @@ deployments = {
         }
         
         tags = {
-          Component = "toab-aiven-service-ping-lambda-prod"
+          Component = "toab-aiven-service-ping-lambda-live"
         }
       }
 
       auth0 = {
         api_identifier = "toab-jitsi"
-        domain = "teenthofabud-prod.eu.auth0.com"
+        domain = "teenthofabud-live.eu.auth0.com"
       }
     }
 
