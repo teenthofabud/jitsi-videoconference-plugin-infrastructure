@@ -133,10 +133,11 @@ variable "moderator_db_config" {
 }
 
 variable "aiven_ping_db_config" {
-  type = optional(object({
+  type = object({
     username = string
     password = string
     url = string 
-  }))
+  })
   sensitive = true
+  default = null
 }
