@@ -29,3 +29,7 @@ module "jitsi_backend" {
   }
 }
 
+moved {
+  from = module.jitsi_backend[0].module.db_ping_lambda
+  to   = module.jitsi_backend[0].module.db_ping_lambda[0]
+}
