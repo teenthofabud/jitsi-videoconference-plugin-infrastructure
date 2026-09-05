@@ -48,7 +48,7 @@ jobs:
 
       # Fetchig secrets from Bitwarden
       - name: Get Secrets
-        id: secrets
+        id: core_secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
@@ -65,7 +65,7 @@ jobs:
         # Fetchig secrets from Bitwarden for aiven ping service separately
       - name: Get Secrets for Aiven ping service
         if: inputs.environment == 'dev'
-        id: secrets
+        id: aiven_secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
@@ -82,9 +82,9 @@ jobs:
           cat << EOF > stacks/aws/moderator.auto.tfvars.json
           {
             "moderator_db_config": {
-              "username": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_URL }}"
+              "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
+              "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
+              "url": "${{ env.MODERATOR_SERVICE_DB_URL }}"
             }
           }
           EOF
@@ -96,9 +96,9 @@ jobs:
           cat << EOF > stacks/aws/ping.auto.tfvars.json
           {
             "aiven_ping_db_config": {
-              "username": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_URL }}"
+              "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
+              "password": "${{ env.AIVEN_SERVICE_DB_PASSWORD }}",
+              "url": "${{ env.AIVEN_SERVICE_DB_URL }}"
             }
           }
           EOF
@@ -108,8 +108,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ steps.secrets.outputs.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ steps.secrets.outputs.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
       # Destroy Cloudflare resources, target only website dns 
       - name: Terraform Init -- target only website resources
@@ -120,7 +120,7 @@ jobs:
 
       - name: Terraform Destroy Plan -- target only website resources
         env:
-            CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+            CLOUDFLARE_API_TOKEN: ${{ env.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform -chdir=stacks/cloudflare-frontend plan -destroy \
             -var-file="../../envs/cloudflare-frontend/${TF_ENV}.tfvars" \
@@ -128,7 +128,7 @@ jobs:
 
       - name: Terraform Destroy
         env:
-          CLOUDFLARE_API_TOKEN: ${{ steps.secrets.outputs.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ env.CLOUDFLARE_API_TOKEN }}
         run: |
           terraform -chdir=stacks/cloudflare-frontend apply -auto-approve \
             destroy.tfplan

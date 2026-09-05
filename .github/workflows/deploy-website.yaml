@@ -36,7 +36,7 @@ jobs:
 
       # Fetchig secrets from Bitwarden
       - name: Get Secrets
-        id: secrets
+        id: core_secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
@@ -53,7 +53,7 @@ jobs:
         # Fetchig secrets from Bitwarden for aiven ping service separately
       - name: Get Secrets for Aiven ping service
         if: inputs.environment == 'dev'
-        id: secrets
+        id: aiven_secrets
         uses: bitwarden/sm-action@v3.0.0
         with:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
@@ -70,9 +70,9 @@ jobs:
           cat << EOF > stacks/aws/moderator.auto.tfvars.json
           {
             "moderator_db_config": {
-              "username": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_URL }}"
+              "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
+              "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
+              "url": "${{ env.MODERATOR_SERVICE_DB_URL }}"
             }
           }
           EOF
@@ -84,9 +84,9 @@ jobs:
           cat << EOF > stacks/aws/ping.auto.tfvars.json
           {
             "aiven_ping_db_config": {
-              "username": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_URL }}"
+              "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
+              "password": "${{ env.AIVEN_SERVICE_DB_PASSWORD }}",
+              "url": "${{ env.AIVEN_SERVICE_DB_URL }}"
             }
           }
           EOF
