@@ -1,15 +1,10 @@
-resource "aiven_pg" "jitsi" {
-  project      = var.aiven_project
-  service_name = var.service_name
-  plan         = var.plan
-  cloud_name = var.db_cloud_name
-  termination_protection = var.termination_protection
 
-  dynamic "tech_emails" {
-    for_each = var.tech_emails
-
-    content {
-      email = tech_emails.value
-    }
-  }
+// aiven pg service has to be created by hand and defaultdb will be created automatically
+resource "aiven_pg_database" "primarydb" {
+  project       = var.aiven_project
+  service_name  = var.service_name
+  database_name = var.database_name
+  // OPTIONAL FIELDS
+  lc_collate = "en_US.UTF-8" 
+  lc_ctype   = "en_US.UTF-8" 
 }

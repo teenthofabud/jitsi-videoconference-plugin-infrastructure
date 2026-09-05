@@ -8,26 +8,8 @@ variable "service_name" {
   type        = string
 }
 
-variable "plan" {
-  description = "Aiven PostgreSQL service plan."
-  type        = string
-}
-
-variable "db_cloud_name" {
-  description = "Cloud provider and the desired region in the format {provider-region}, Eg:- do-fra --> digital ocean, Frankfurt"
+variable "database_name" {
   type = string
+  description = "Database name"
 }
-
-variable "tech_emails" {
-  description = "Email addresses that receive technical alerts and service updates."
-  type        = set(string)
-  default     = []
-}
-
-variable "termination_protection" {
-  description = "Whether to protect the PostgreSQL service from deletion."
-  type        = bool
-  default     = true
-}
-
 
