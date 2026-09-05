@@ -45,27 +45,48 @@ jobs:
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
             ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_URL }} > AIVEN_SERVICE_DB_URL
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
             ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_PASSWORD }} > MODERATOR_SERVICE_DB_PASSWORD
             ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_URL }} > MODERATOR_SERVICE_DB_URL
             ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_USERNAME }} > MODERATOR_SERVICE_DB_USERNAME
+          set_env: true
+        
+        # Fetchig secrets from Bitwarden for aiven ping service separately
+      - name: Get Secrets for Aiven ping service
+        if: inputs.environment == 'dev'
+        id: secrets
+        uses: bitwarden/sm-action@v3.0.0
+        with:
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
+          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
+          secrets: |
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_URL }} > AIVEN_SERVICE_DB_URL
+            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
+          set_env: true
 
-      # create a tfvars json file with db credentials for both lambdas and inject 'em to terraform
-      - name: Create Secrets File
+        # moderator db credentials passed as json file
+      - name: Generate Shared Variables
         run: |
-          cat << EOF > stacks/aws/secrets.auto.tfvars.json
+          cat << EOF > stacks/aws/moderator.auto.tfvars.json
           {
             "moderator_db_config": {
-              "username": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.secrets.outputs.MODERATOR_SERVICE_DB_URL }}"
-            },
+              "username": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_USERNAME }}",
+              "password": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_PASSWORD }}",
+              "url": "${{ steps.core_secrets.outputs.MODERATOR_SERVICE_DB_URL }}"
+            }
+          }
+          EOF
+          
+      # aiven service db credentials
+      - name: Generate Ping Variables (Dev)
+        if: inputs.environment == 'dev'
+        run: |
+          cat << EOF > stacks/aws/ping.auto.tfvars.json
+          {
             "aiven_ping_db_config": {
-              "username": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_USERNAME }}",
-              "password": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_PASSWORD }}",
-              "url": "${{ steps.secrets.outputs.AIVEN_SERVICE_DB_URL }}"
+              "username": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_USERNAME }}",
+              "password": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_PASSWORD }}",
+              "url": "${{ steps.dev_secrets.outputs.AIVEN_SERVICE_DB_URL }}"
             }
           }
           EOF

@@ -40,6 +40,7 @@ module "moderator_lambda" {
 
 module "db_ping_lambda" {
   source = "../../modules/aws/lambda"
+  count = var.config.db_ping.enable_db_ping ? 1 : 0
   
   lambda_function_name         = "${var.config.db_ping.function_name}-${var.context.environment}"
   lambda_execution_role_name   = "${var.config.db_ping.function_name}-execution-role-${var.context.environment}"

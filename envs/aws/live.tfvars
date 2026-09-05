@@ -75,6 +75,7 @@ deployments = {
       }
 
       db_ping = {
+        enable_db_ping        = false
         function_name         = "toab-aiven-service-ping-live"
         handler               = "bootstrap"
         runtime               = "provided.al2023"
