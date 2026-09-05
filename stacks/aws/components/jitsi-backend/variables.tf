@@ -45,6 +45,7 @@ variable "config" {
     })
 
     db_ping = object({
+      enable_db_ping        = bool
       function_name         = string
       handler               = string
       runtime               = string

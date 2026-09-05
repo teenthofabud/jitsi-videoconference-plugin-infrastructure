@@ -95,6 +95,7 @@ variable "deployments" {
       })
 
       db_ping = object({
+        enable_db_ping        = bool
         function_name         = string
         handler               = string
         runtime               = string
@@ -132,10 +133,10 @@ variable "moderator_db_config" {
 }
 
 variable "aiven_ping_db_config" {
-  type = object({
+  type = optional(object({
     username = string
     password = string
     url = string 
-  })
+  }))
   sensitive = true
 }
