@@ -16,7 +16,7 @@ deployments = {
       force_destroy      = false
       enable_versioning  = true
       enable_website     = true
-      enable_public_read = false
+      enable_public_read = true
       tags = {
         Component = "jitsi-web-live"
       }
