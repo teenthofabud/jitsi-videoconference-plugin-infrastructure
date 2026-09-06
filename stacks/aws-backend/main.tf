@@ -1,10 +1,3 @@
-module "jitsi_web" {
-  count  = local.features.jitsi_web ? 1 : 0
-  source = "./components/jitsi-web"
-
-  context = local.context
-  config  = local.deployment_config.jitsi_web
-}
 
 module "jitsi_vpc" {
   count  = local.features.jitsi_vpc ? 1 : 0
@@ -19,7 +12,6 @@ module "jitsi_backend" {
   source = "./components/jitsi-backend"
 
   context                = local.context
-  terraform_state_bucket = var.terraform_state_bucket
   config = {
     moderator = local.deployment_config.jitsi_backend.moderator
     db_ping   = local.deployment_config.jitsi_backend.db_ping
@@ -29,7 +21,3 @@ module "jitsi_backend" {
   }
 }
 
-moved {
-  from = module.jitsi_backend[0].module.db_ping_lambda
-  to   = module.jitsi_backend[0].module.db_ping_lambda[0]
-}

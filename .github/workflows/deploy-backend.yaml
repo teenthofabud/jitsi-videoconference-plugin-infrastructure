@@ -66,7 +66,7 @@ jobs:
         # moderator db credentials passed as json file
       - name: Generate Shared Variables
         run: |
-          cat << EOF > stacks/aws/moderator.auto.tfvars.json
+          cat << EOF > stacks/aws-backend/moderator.auto.tfvars.json
           {
             "moderator_db_config": {
               "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
@@ -77,10 +77,10 @@ jobs:
           EOF
           
       # aiven service db credentials
-      - name: Generate Ping Variables (Dev)
+      - name: Generate Aiven Ping Service Variables (Dev)
         if: inputs.environment == 'dev'
         run: |
-          cat << EOF > stacks/aws/ping.auto.tfvars.json
+          cat << EOF > stacks/aws-backend/ping.auto.tfvars.json
           {
             "aiven_ping_db_config": {
               "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
@@ -101,20 +101,20 @@ jobs:
       # AWS Terraform Execution, target only backend resources
       - name: Initialize AWS Terraform -- target only backend resources
         run: |
-          terraform -chdir=stacks/aws init \
+          terraform -chdir=stacks/aws-backend init \
             -reconfigure \
-            -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
+            -backend-config="../../backendfiles/aws-backend/backend.${TF_ENV}.conf"
 
       - name: Plan AWS Terraform -- target only backend resources
         run: |
-          terraform -chdir=stacks/aws plan \
-            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
+          terraform -chdir=stacks/aws-backend plan \
+            -var-file="../../envs/aws-backend/${TF_ENV}.tfvars" \
             -target='module.jitsi_backend[0]' \
             -out=tfplan
 
       - name: Apply AWS Terraform
         run: |
-          terraform -chdir=stacks/aws apply -auto-approve tfplan
+          terraform -chdir=stacks/aws-backend apply -auto-approve tfplan
 
       # Cloudflare Terraform Execution, target only backend resources
       - name: Initialize Cloudflare Terraform -- target only backend resources

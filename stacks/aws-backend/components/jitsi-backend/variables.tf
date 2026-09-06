@@ -8,11 +8,6 @@ variable "context" {
   })
 }
 
-variable "terraform_state_bucket" {
-  type        = string
-  description = "Terraform state bucket for the Aiven stack"
-}
-
 variable "config" {
   description = "Jitsi backend component configuration."
 

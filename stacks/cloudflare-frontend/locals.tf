@@ -3,7 +3,7 @@ data "terraform_remote_state" "aws" {
 
   config = {
     bucket       = var.terraform_state_bucket
-    key          = "tfstate/aws.tfstate"
+    key          = "tfstate/aws-frontend.tfstate"
     region       = var.aws_region
     use_lockfile = true
   }
