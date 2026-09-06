@@ -19,7 +19,7 @@ config = {
   }
   
   worker = {
-    proxy_worker_name                  = "proxy-worker-backend"
+    proxy_worker_name                  = "proxy-worker-backend-dev"
     incoming_request_pattern_for_proxy = "api.jitsi.dpdns.org/*"
   }
 
