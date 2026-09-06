@@ -18,7 +18,7 @@ on:
         type: string
 
 concurrency:
-  group: jitsi-infra-${{ inputs.environment }}
+  group: jitsi-backend-${{ inputs.environment }}
   cancel-in-progress: false
 
 jobs:
