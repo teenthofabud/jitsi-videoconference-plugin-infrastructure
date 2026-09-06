@@ -14,7 +14,7 @@ on:
         default: dev
 
 concurrency:
-  group: jitsi-infra-${{ inputs.environment }}
+  group: jitsi-db-${{ inputs.environment }}
   cancel-in-progress: false
 
 jobs:
