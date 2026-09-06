@@ -20,7 +20,7 @@ config = {
 
   worker = {
     proxy_worker_name                  = "proxy-worker-backend-live"
-    incoming_request_pattern_for_proxy = "api.toab-jitsi/*"
+    incoming_request_pattern_for_proxy = "api.toab-jitsi.com/*"
   }
 }
     
