@@ -1,10 +1,10 @@
 locals {
 
-  aiven_service_ping_environment_variables = {
+  aiven_service_ping_environment_variables = var.config.db_ping.enable_db_ping ? {
     DB_USERNAME = var.config.aiven_ping_db_config.username
     DB_PASSWORD = var.config.aiven_ping_db_config.password
     DB_URI      = var.config.aiven_ping_db_config.url
-  }
+  } : {}
 
   moderator_service_environment_variables = {
     JITSI_DB_USERNAME = var.config.moderator_db_config.username
