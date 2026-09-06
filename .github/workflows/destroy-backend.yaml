@@ -79,7 +79,7 @@ jobs:
         # moderator db credentials passed as json file
       - name: Generate Shared Variables
         run: |
-          cat << EOF > stacks/aws/moderator.auto.tfvars.json
+          cat << EOF > stacks/aws-backend/moderator.auto.tfvars.json
           {
             "moderator_db_config": {
               "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
@@ -93,7 +93,7 @@ jobs:
       - name: Generate Ping Variables (Dev)
         if: inputs.environment == 'dev'
         run: |
-          cat << EOF > stacks/aws/ping.auto.tfvars.json
+          cat << EOF > stacks/aws-backend/ping.auto.tfvars.json
           {
             "aiven_ping_db_config": {
               "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
@@ -136,18 +136,18 @@ jobs:
       # Destroy AWS resources, target only backend resources
       - name: Terraform Init -- target only backend resources
         run: |
-          terraform -chdir=stacks/aws init \
+          terraform -chdir=stacks/aws-backend init \
           -reconfigure \
-          -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
+          -backend-config="../../backendfiles/aws-backend/backend.${TF_ENV}.conf"
 
       - name: Terraform Destroy Plan -- target only backend resources
         run: |
-          terraform -chdir=stacks/aws plan -destroy \
+          terraform -chdir=stacks/aws-backend plan -destroy \
             -target='module.jitsi_backend[0]' \
-            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
+            -var-file="../../envs/aws-backend/${TF_ENV}.tfvars" \
             -out=destroy.tfplan
 
       - name: Terraform Destroy
         run: |
-          terraform -chdir=stacks/aws apply -auto-approve \
+          terraform -chdir=stacks/aws-backend apply -auto-approve \
             destroy.tfplan

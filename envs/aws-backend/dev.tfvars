@@ -1,42 +1,28 @@
 project_name           = "toab-jitsi"
 aws_region             = "eu-central-1"
 use_local_mock         = false
-environment            = "live"
-terraform_state_bucket = "toab-jitsi-infrastructure-live-414772275073-eu-central-1-an"
+environment            = "dev"
+terraform_state_bucket = "toab-jitsi-infrastructure-dev-414772275073-eu-central-1-an"
 deployments = {
   eu-central-1 = {
 
     features = {
-      jitsi_web     = true
       jitsi_vpc     = false
       jitsi_backend = true
-      cloudflare    = true
-    }
-
-    jitsi_web = {
-      index_document     = "index.html"
-      error_document     = "error.html"
-      force_destroy      = false
-      enable_versioning  = true
-      enable_website     = true
-      enable_public_read = false
-      tags = {
-        Component = "jitsi-web-live"
-      }
     }
 
     jitsi_vpc = {
       vpc = {
-        cidr = "10.20.0.0/16"
+        cidr = "10.0.0.0/16"
         tags = {
-          Component = "jitsi-vpc-live"
+          Component = "jitsi-vpc-dev"
         }
       }
 
       subnet = {
-        cidr = "10.20.1.0/24"
+        cidr = "10.0.1.0/24"
         tags = {
-          Component = "jitsi-subnet-live"
+          Component = "jitsi-subnet-dev"
         }
       }
 
@@ -44,7 +30,7 @@ deployments = {
         service_name    = "s3"
         route_table_ids = []
         tags = {
-          Component = "jitsi-gateway-endpoint-live"
+          Component = "jitsi-gateway-endpoint-dev"
         }
       }
     }
@@ -58,11 +44,6 @@ deployments = {
         memory_size           = 256
         timeout               = 300
         log_retention_in_days = 7
-        
-        spring_config = {
-          hikari_max_pool_size = 2
-          hikari_min_idle_count = 1
-        }
 
         function_url = {
           auth_type         = "NONE"
@@ -74,14 +55,20 @@ deployments = {
           expose_headers    = []
           max_age           = 300
         }
+
+        spring_config = {
+          hikari_max_pool_size = 2
+          hikari_min_idle_count = 1
+        }
+
         tags = {
-          Component = "toab-jitsi-moderator-service-lambda-live"
+          Component = "toab-jitsi-moderator-service-lambda-dev"
         }
       }
 
       db_ping = {
-        enable_db_ping        = false
-        function_name         = "toab-aiven-service-ping-live"
+        enable_db_ping        = true
+        function_name         = "toab-aiven-service-ping"
         handler               = "bootstrap"
         runtime               = "provided.al2023"
         architectures         = ["x86_64"]
@@ -97,18 +84,16 @@ deployments = {
           maximum_event_age_in_seconds = 3600
           maximum_retry_attempts       = 0
         }
-        
         tags = {
-          Component = "toab-aiven-service-ping-lambda-live"
+          Component = "toab-aiven-service-ping-lambda-dev"
         }
       }
 
       auth0 = {
         api_identifier = "toab-jitsi"
-        domain = "teenthofabud-live.eu.auth0.com"
+        domain = "teenthofabud-dev.eu.auth0.com"
       }
     }
 
   }
-
 }

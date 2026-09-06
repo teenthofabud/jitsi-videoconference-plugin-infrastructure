@@ -45,51 +45,7 @@ jobs:
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
             ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
             ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_PASSWORD }} > MODERATOR_SERVICE_DB_PASSWORD
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_URL }} > MODERATOR_SERVICE_DB_URL
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_USERNAME }} > MODERATOR_SERVICE_DB_USERNAME
           set_env: true
-        
-        # Fetchig secrets from Bitwarden for aiven ping service separately
-      - name: Get Secrets for Aiven ping service
-        if: inputs.environment == 'dev'
-        id: aiven_secrets
-        uses: bitwarden/sm-action@v3.0.0
-        with:
-          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
-          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
-          secrets: |
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_URL }} > AIVEN_SERVICE_DB_URL
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
-          set_env: true
-
-        # moderator db credentials passed as json file
-      - name: Generate Shared Variables
-        run: |
-          cat << EOF > stacks/aws/moderator.auto.tfvars.json
-          {
-            "moderator_db_config": {
-              "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
-              "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "${{ env.MODERATOR_SERVICE_DB_URL }}"
-            }
-          }
-          EOF
-          
-      # aiven service db credentials
-      - name: Generate Ping Variables (Dev)
-        if: inputs.environment == 'dev'
-        run: |
-          cat << EOF > stacks/aws/ping.auto.tfvars.json
-          {
-            "aiven_ping_db_config": {
-              "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
-              "password": "${{ env.AIVEN_SERVICE_DB_PASSWORD }}",
-              "url": "${{ env.AIVEN_SERVICE_DB_URL }}"
-            }
-          }
-          EOF
 
       # AWS Credentials
       - name: Configure AWS Credentials
@@ -102,20 +58,19 @@ jobs:
       # AWS Terraform Execution target only website resources
       - name: Initialize AWS Terraform -- target only website resources
         run: |
-          terraform -chdir=stacks/aws init \
+          terraform -chdir=stacks/aws-frontend init \
             -reconfigure \
-            -backend-config="../../backendfiles/aws/backend.${TF_ENV}.conf"
+            -backend-config="../../backendfiles/aws-frontend/backend.${TF_ENV}.conf"
 
       - name: Plan AWS Terraform -- target only website resources
         run: |
-          terraform -chdir=stacks/aws plan \
-            -var-file="../../envs/aws/${TF_ENV}.tfvars" \
-            -target='module.jitsi_web[0]' \
+          terraform -chdir=stacks/aws-frontend plan \
+            -var-file="../../envs/aws-frontend/${TF_ENV}.tfvars" \
             -out=tfplan
 
       - name: Apply AWS Terraform
         run: |
-          terraform -chdir=stacks/aws apply -auto-approve tfplan
+          terraform -chdir=stacks/aws-frontend apply -auto-approve tfplan
 
       # Cloudflare Terraform Execution, target both common resources and website dns
       - name: Initialize Cloudflare Terraform -- target both common resources and website dns
