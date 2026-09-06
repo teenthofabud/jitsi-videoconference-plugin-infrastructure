@@ -58,6 +58,11 @@ deployments = {
         memory_size           = 256
         timeout               = 300
         log_retention_in_days = 7
+        
+        spring_config = {
+          hikari_max_pool_size = 2
+          hikari_min_idle_count = 1
+        }
 
         function_url = {
           auth_type         = "NONE"
@@ -91,11 +96,6 @@ deployments = {
           input                        = "{}"
           maximum_event_age_in_seconds = 3600
           maximum_retry_attempts       = 0
-        }
-
-        spring_config = {
-          hikari_max_pool_size = 2
-          hikari_min_idle_count = 1
         }
         
         tags = {
