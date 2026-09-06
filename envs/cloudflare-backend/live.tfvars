@@ -13,14 +13,14 @@ config = {
   }
 
   rate_limit = {
-    period              = 60
+    period              = 10
     requests_per_period = 100 
-    mitigation_timeout  = 60
+    mitigation_timeout  = 10
   }
 
   worker = {
     proxy_worker_name                  = "proxy-worker-backend-live"
-    incoming_request_pattern_for_proxy = "api.toab-jitsi*"
+    incoming_request_pattern_for_proxy = "api.toab-jitsi/*"
   }
 }
     
