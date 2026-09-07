@@ -41,12 +41,12 @@ jobs:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
           access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
           secrets: |
-            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
-            ${{ vars.BITWARDEN_SECRET_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
-            ${{ vars.BITWARDEN_SECRET_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_PASSWORD }} > MODERATOR_SERVICE_DB_PASSWORD
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_URL }} > MODERATOR_SERVICE_DB_URL
-            ${{ vars.BITWARDEN_SECRET_UUID_MODERATOR_SERVICE_DB_USERNAME }} > MODERATOR_SERVICE_DB_USERNAME
+            ${{ vars.BITWARDEN_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_ACCESS_KEY_ID }} > AWS_ACCESS_KEY_ID
+            ${{ vars.BITWARDEN_UUID_TOAB_JITSI_TERRAFORM_PROVISIONER_SECRET_ACCESS_KEY }} > AWS_SECRET_ACCESS_KEY
+            ${{ vars.BITWARDEN_UUID_CLOUDFLARE_USER_API_TOKEN_TOAB_JITSI_WEB }} > CLOUDFLARE_API_TOKEN
+            ${{ vars.BITWARDEN_UUID_MODERATOR_SERVICE_DB_PASSWORD }} > MODERATOR_SERVICE_DB_PASSWORD
+            ${{ vars.BITWARDEN_UUID_AIVEN_DB_HOST }} > AIVEN_DB_HOST
+            ${{ vars.BITWARDEN_UUID_MODERATOR_SERVICE_DB_USERNAME }} > MODERATOR_SERVICE_DB_USERNAME
           set_env: true
         
         # Fetchig secrets from Bitwarden for aiven ping service separately
@@ -58,9 +58,8 @@ jobs:
           cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
           access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
           secrets: |
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_URL }} > AIVEN_SERVICE_DB_URL
-            ${{ vars.BITWARDEN_SECRET_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
+            ${{ vars.BITWARDEN_UUID_AIVEN_SERVICE_DB_PASSWORD }} > AIVEN_SERVICE_DB_PASSWORD
+            ${{ vars.BITWARDEN_UUID_AIVEN_SERVICE_DB_USERNAME }} > AIVEN_SERVICE_DB_USERNAME
           set_env: true
 
         # moderator db credentials passed as json file
@@ -71,7 +70,7 @@ jobs:
             "moderator_db_config": {
               "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
               "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "${{ env.MODERATOR_SERVICE_DB_URL }}"
+              "url": "postgres://${{ env.AIVEN_DB_HOST }}/toab-jitsi-${{ inputs.environment }}?sslmode=require"
             }
           }
           EOF
@@ -85,7 +84,7 @@ jobs:
             "aiven_ping_db_config": {
               "username": "${{ env.AIVEN_SERVICE_DB_USERNAME }}",
               "password": "${{ env.AIVEN_SERVICE_DB_PASSWORD }}",
-              "url": "${{ env.AIVEN_SERVICE_DB_URL }}"
+              "url": "postgres://${{ env.AIVEN_DB_HOST }}/defaultdb?sslmode=require"
             }
           }
           EOF
