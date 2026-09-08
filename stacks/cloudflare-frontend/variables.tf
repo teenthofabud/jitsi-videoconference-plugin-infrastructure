@@ -24,7 +24,8 @@ variable "config" {
     domain_name = string
 
     cdn = object({
-      website_dns_record_name                    = optional(string, "api")
+      website_dns_record_name            = optional(string, "api")
+      enable_redirect_to_www             = true
       dns_record_type                    = optional(string, "CNAME")
       cloudflare_record_proxied          = optional(bool, true)
       cloudflare_record_ttl              = optional(number, 1)
@@ -37,7 +38,7 @@ variable "config" {
 
     worker = object({
       proxy_worker_name                  = string
-      incoming_request_pattern_for_proxy = string
+      incoming_request_patterns_for_proxy = set(string)
     })
   })
 
