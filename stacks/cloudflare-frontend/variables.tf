@@ -25,7 +25,7 @@ variable "config" {
 
     cdn = object({
       website_dns_record_name            = optional(string, "api")
-      enable_redirect_to_www             = true
+      enable_redirect_to_www             = bool
       dns_record_type                    = optional(string, "CNAME")
       cloudflare_record_proxied          = optional(bool, true)
       cloudflare_record_ttl              = optional(number, 1)
