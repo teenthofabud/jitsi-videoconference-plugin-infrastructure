@@ -27,6 +27,13 @@ variable "website_dns_record_name" {
   default     = "api"
 }
 
+variable "enable_redirect_to_www" {
+  description = "Whether to enable redirect to www subdomain"
+  type        = bool
+  default     = true
+  
+}
+
 variable "dns_record_type" {
   description = "The type of DNS record to create (e.g., A, CNAME)."
   type        = string
@@ -68,7 +75,7 @@ variable "proxy_worker_path" {
   type        = string
 }
 
-variable "incoming_request_pattern_for_proxy" {
+variable "incoming_request_patterns_for_proxy" {
   description = "Pattern to match the incoming requests against"
-  type        = string
+  type        = set(string)
 }

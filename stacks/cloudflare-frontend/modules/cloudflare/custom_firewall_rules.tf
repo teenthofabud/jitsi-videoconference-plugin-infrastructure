@@ -17,3 +17,31 @@ resource "cloudflare_ruleset" "zone_custom_firewall" {
     }
   ]
 }
+
+resource "cloudflare_ruleset" "www_to_apex_redirect" {
+  count = var.enable_redirect_to_www ? 1 : 0
+  zone_id     = local.zone_id
+  name        = "Default Redirects"
+  description = "Redirect rules for the zone"
+  kind        = "zone"
+  phase       = "http_request_dynamic_redirect"
+
+  rules = [
+    {
+      description = "Redirect www to apex domain"
+      expression  = "(http.host eq \"www.${var.domain_name}\")"
+      action      = "redirect"
+      enabled     = true
+
+      action_parameters = {
+        from_value = {
+          status_code           = 301
+          preserve_query_string = true 
+          target_url = {
+            expression = "concat(\"https://${var.domain_name}\", http.request.uri.path)"
+          }
+        }
+      }
+    }
+  ]
+}

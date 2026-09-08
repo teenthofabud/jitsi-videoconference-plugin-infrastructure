@@ -41,8 +41,10 @@ resource "cloudflare_workers_deployment" "proxy_worker_deployment" {
 }
 
 resource "cloudflare_workers_route" "proxy_workers_route" {
+  for_each = var.incoming_request_patterns_for_proxy
+  
   zone_id = local.zone_id
-  pattern = var.incoming_request_pattern_for_proxy
+  pattern = each.value
   script  = cloudflare_worker.proxy_worker.name
   
   depends_on = [ cloudflare_worker.proxy_worker, 

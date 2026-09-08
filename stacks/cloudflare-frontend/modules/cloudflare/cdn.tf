@@ -17,3 +17,4 @@ resource "cloudflare_dns_record" "website_cname" {
   proxied = var.cloudflare_record_proxied
   ttl     = var.cloudflare_record_ttl
 }
+
