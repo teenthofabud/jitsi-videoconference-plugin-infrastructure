@@ -20,7 +20,7 @@ module "cloudflare_frontend" {
   proxy_worker_name                  = var.config.worker.proxy_worker_name
   proxy_worker_module_name           = "proxy_worker_website.js"
   proxy_worker_path                  = "${path.module}/scripts/proxy_worker_website.js"
-  incoming_request_pattern_for_proxy = var.config.worker.incoming_request_pattern_for_proxy
+  incoming_request_patterns_for_proxy = var.config.worker.incoming_request_patterns_for_proxy
 
 }
 
