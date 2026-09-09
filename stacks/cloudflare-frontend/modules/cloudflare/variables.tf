@@ -24,7 +24,6 @@ variable "page_rule_force_https_priority" {
 variable "website_dns_record_name" {
   description = "The name of the DNS record to create for the static website"
   type        = string
-  default     = "api"
 }
 
 variable "enable_redirect_to_www" {
