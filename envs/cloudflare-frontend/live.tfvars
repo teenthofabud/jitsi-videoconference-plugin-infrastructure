@@ -19,7 +19,7 @@ config = {
 
   worker = {
     proxy_worker_name                  = "proxy-worker-website-live"
-    incoming_request_patterns_for_proxy = ["www.toab-jitsi.com/*","toab-jitsi.com/*"]
+    incoming_request_patterns_for_proxy = ["toab-jitsi.com/*"]
   }
 }
     
