@@ -19,6 +19,6 @@ config = {
   
   worker = {
     proxy_worker_name                  = "proxy-worker-website-dev"
-    incoming_request_patterns_for_proxy = ["www.jitsi.dpdns.org/*","jitsi.dpdns.org/*"]
+    incoming_request_patterns_for_proxy = ["jitsi.dpdns.org/*"]
   }
 }
