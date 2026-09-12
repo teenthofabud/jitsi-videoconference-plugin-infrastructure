@@ -83,7 +83,7 @@ jobs:
             "moderator_db_config": {
               "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
               "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "jdbc:postgresql://${{ env.AIVEN_DB_HOST }}/toab-jitsi-${{ inputs.environment }}?sslmode=require&currentSchema=jitsi_moderator_${{ inputs.environment }}"
+              "url": "jdbc:postgresql://${{ env.AIVEN_DB_HOST }}/toab-jitsi-${{ inputs.environment }}?sslmode=require&currentSchema=jitsi_moderator"
             }
           }
           EOF
