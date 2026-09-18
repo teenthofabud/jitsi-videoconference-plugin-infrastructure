@@ -7,14 +7,17 @@ locals {
   } : {}
 
   moderator_service_environment_variables = {
-    JITSI_DB_USERNAME = var.config.moderator_db_config.username
-    JITSI_DB_PASSWORD = var.config.moderator_db_config.password
-    JITSI_DB_URL      = var.config.moderator_db_config.url
-    JITSI_DB_DIALECT  = "org.hibernate.dialect.PostgreSQLDialect"
-    JITSI_DB_DRIVER_CLASS = "org.postgresql.Driver"
+    MODERATOR_DB_USERNAME = var.config.moderator_db_config.username
+    MODERATOR_DB_PASSWORD = var.config.moderator_db_config.password
+    MODERATOR_DB_NAME      = var.config.moderator_db_config.db_name
+    MODERATOR_SCHEMA_NAME = var.config.moderator_db_config.schema
+    MODERATOR_DB_HOST = var.config.moderator_db_config.host
+    MODERATOR_DB_PORT = var.config.moderator_db_config.port
+    # MODERATOR_DB_DIALECT  = "org.hibernate.dialect.PostgreSQLDialect"
+    # MODERATOR_DB_DRIVER_CLASS = "org.postgresql.Driver"
     AUTH0_API_IDENTIFIER = var.config.auth0.api_identifier
     AUTH0_DOMAIN = var.config.auth0.domain
-    JITSI_HIKARI_MAX_POOL_SIZE = var.config.moderator.spring_config.hikari_max_pool_size
-    JITSI_HIKARI_MIN_IDLE_COUNT = var.config.moderator.spring_config.hikari_min_idle_count
+    MODERATOR_HIKARI_MAX_POOL_SIZE = var.config.moderator.spring_config.hikari_max_pool_size
+    MODERATOR_HIKARI_MIN_IDLE_COUNT = var.config.moderator.spring_config.hikari_min_idle_count
   }
 }
