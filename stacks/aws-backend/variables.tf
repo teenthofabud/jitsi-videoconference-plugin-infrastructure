@@ -108,7 +108,10 @@ variable "moderator_db_config" {
   type = object({
     username = string
     password = string
-    url = string 
+    db_name = string
+    host = string
+    port = string 
+    schema = string
   })
   sensitive = true
 }
