@@ -70,9 +70,11 @@ jobs:
             "moderator_db_config": {
               "username": "${{ env.MODERATOR_SERVICE_DB_USERNAME }}",
               "password": "${{ env.MODERATOR_SERVICE_DB_PASSWORD }}",
-              "url": "jdbc:postgresql://${{ env.AIVEN_DB_HOST }}/toab-jitsi-${{ inputs.environment }}?sslmode=require&currentSchema=jitsi_moderator"
-            }
-          }
+              "schema" : "jitsi_moderator"
+              "db_name": "toab-jitsi-${{ inputs.environment }}",
+              "host": "$(echo "${{ env.AIVEN_DB_HOST }}" | cut -d':' -f1)",
+              "port": "$(echo "${{ env.AIVEN_DB_HOST }}" | cut -d':' -f2)"
+           }
           EOF
           
       # aiven service db credentials
