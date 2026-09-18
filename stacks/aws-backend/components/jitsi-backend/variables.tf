@@ -68,7 +68,10 @@ variable "config" {
     moderator_db_config = object({
       username = string
       password = string
-      url = string 
+      db_name = string
+      host = string
+      port = string 
+      schema = string
     })
 
     aiven_ping_db_config = object({
