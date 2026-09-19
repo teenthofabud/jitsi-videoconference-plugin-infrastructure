@@ -11,6 +11,7 @@ locals {
     MODERATOR_DB_PASSWORD = var.config.moderator_db_config.password
     MODERATOR_DB_NAME      = var.config.moderator_db_config.db_name
     MODERATOR_SCHEMA_NAME = var.config.moderator_db_config.schema
+    SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT__SCHEMA = var.config.moderator_db_config.schema
     MODERATOR_DB_HOST = var.config.moderator_db_config.host
     MODERATOR_DB_PORT = var.config.moderator_db_config.port
     # MODERATOR_DB_DIALECT  = "org.hibernate.dialect.PostgreSQLDialect"
