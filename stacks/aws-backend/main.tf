@@ -11,13 +11,16 @@ module "jitsi_backend" {
   count  = local.features.jitsi_backend ? 1 : 0
   source = "./components/jitsi-backend"
 
-  context                = local.context
+  context = local.context
   config = {
-    moderator = local.deployment_config.jitsi_backend.moderator
-    db_ping   = local.deployment_config.jitsi_backend.db_ping
-    auth0 = local.deployment_config.jitsi_backend.auth0
-    moderator_db_config = var.moderator_db_config
-    aiven_ping_db_config = var.aiven_ping_db_config
+    moderator             = local.deployment_config.jitsi_backend.moderator
+    db_ping               = local.deployment_config.jitsi_backend.db_ping
+    outlook_graph_renewal = local.deployment_config.jitsi_backend.outlook_graph_renewal
+    auth0                 = local.deployment_config.jitsi_backend.auth0
+    moderator_db_config   = var.moderator_db_config
+    aiven_ping_db_config  = var.aiven_ping_db_config
   }
+
+  outlook_graph_renewal_config = var.outlook_graph_renewal_config
 }
 

@@ -44,9 +44,9 @@ deployments = {
         memory_size           = 256
         timeout               = 300
         log_retention_in_days = 7
-        
+
         spring_config = {
-          hikari_max_pool_size = 2
+          hikari_max_pool_size  = 2
           hikari_min_idle_count = 1
         }
 
@@ -56,7 +56,7 @@ deployments = {
           allow_credentials = false
           allow_headers     = ["content-type", "authorization"]
           allow_methods     = ["POST"]
-          allow_origins     = ["https://www.toab-jitsi.com","https://toab-jitsi.com"]
+          allow_origins     = ["https://www.toab-jitsi.com", "https://toab-jitsi.com"]
           expose_headers    = []
           max_age           = 300
         }
@@ -83,15 +83,38 @@ deployments = {
           maximum_event_age_in_seconds = 3600
           maximum_retry_attempts       = 0
         }
-        
+
         tags = {
           Component = "toab-aiven-service-ping-lambda-live"
         }
       }
 
+      outlook_graph_renewal = {
+        enable_renewal        = true
+        function_name         = "toab-outlook-graph-renewal"
+        handler               = "bootstrap"
+        runtime               = "provided.al2023"
+        architectures         = ["x86_64"]
+        memory_size           = 512
+        timeout               = 900
+        log_retention_in_days = 14
+
+        schedule = {
+          expression                   = "rate(30 minutes)"
+          timezone                     = "UTC"
+          state                        = "ENABLED"
+          input                        = "{}"
+          maximum_event_age_in_seconds = 3600
+          maximum_retry_attempts       = 0
+        }
+        tags = {
+          Component = "toab-outlook-graph-renewal-lambda-live"
+        }
+      }
+
       auth0 = {
         api_identifier = "toab-jitsi"
-        domain = "teenthofabud-live.eu.auth0.com"
+        domain         = "teenthofabud-live.eu.auth0.com"
       }
     }
 

@@ -36,3 +36,4 @@ output.json
 .vscode/
 
 plan.md
+/stacks/aws-backend/outlook-graph-renewal.auto.tfvars.json

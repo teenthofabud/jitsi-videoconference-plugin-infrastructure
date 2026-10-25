@@ -51,13 +51,13 @@ deployments = {
           allow_credentials = false
           allow_headers     = ["content-type", "authorization"]
           allow_methods     = ["POST"]
-          allow_origins     = ["https://www.jitsi.dpdns.org","https://jitsi.dpdns.org"]
+          allow_origins     = ["https://www.jitsi.dpdns.org", "https://jitsi.dpdns.org"]
           expose_headers    = []
           max_age           = 300
         }
 
         spring_config = {
-          hikari_max_pool_size = 2
+          hikari_max_pool_size  = 2
           hikari_min_idle_count = 1
         }
 
@@ -89,9 +89,32 @@ deployments = {
         }
       }
 
+      outlook_graph_renewal = {
+        enable_renewal        = true
+        function_name         = "toab-outlook-graph-renewal"
+        handler               = "bootstrap"
+        runtime               = "provided.al2023"
+        architectures         = ["x86_64"]
+        memory_size           = 512
+        timeout               = 900
+        log_retention_in_days = 14
+
+        schedule = {
+          expression                   = "rate(30 minutes)"
+          timezone                     = "UTC"
+          state                        = "ENABLED"
+          input                        = "{}"
+          maximum_event_age_in_seconds = 3600
+          maximum_retry_attempts       = 0
+        }
+        tags = {
+          Component = "toab-outlook-graph-renewal-lambda-dev"
+        }
+      }
+
       auth0 = {
         api_identifier = "toab-jitsi"
-        domain = "teenthofabud-dev.eu.auth0.com"
+        domain         = "teenthofabud-dev.eu.auth0.com"
       }
     }
 

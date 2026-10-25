@@ -40,8 +40,8 @@ module "moderator_lambda" {
 
 module "db_ping_lambda" {
   source = "../../modules/aws/lambda"
-  count = var.config.db_ping.enable_db_ping ? 1 : 0
-  
+  count  = var.config.db_ping.enable_db_ping ? 1 : 0
+
   lambda_function_name         = "${var.config.db_ping.function_name}-${var.context.environment}"
   lambda_execution_role_name   = "${var.config.db_ping.function_name}-execution-role-${var.context.environment}"
   lambda_execution_policy_name = "${var.config.db_ping.function_name}-execution-policy-${var.context.environment}"
@@ -53,8 +53,8 @@ module "db_ping_lambda" {
   timeout                      = var.config.db_ping.timeout
   environment_variables        = local.aiven_service_ping_environment_variables
   log_retention_in_days        = var.config.db_ping.log_retention_in_days
-  environment = var.context.environment
-  
+  environment                  = var.context.environment
+
   lambda_execution_policy_path = "${path.module}/policies/db-ping-execution-policy.json"
 
   enable_function_url = false
@@ -75,4 +75,40 @@ module "db_ping_lambda" {
     var.context.common_tags,
     var.config.db_ping.tags
   )
+}
+
+
+module "outlook_graph_renewal_lambda" {
+  source = "../../modules/aws/lambda"
+  count  = var.config.outlook_graph_renewal.enable_renewal ? 1 : 0
+
+  lambda_function_name         = "${var.config.outlook_graph_renewal.function_name}-${var.context.environment}"
+  lambda_execution_role_name   = "${var.config.outlook_graph_renewal.function_name}-execution-role-${var.context.environment}"
+  lambda_execution_policy_name = "${var.config.outlook_graph_renewal.function_name}-execution-policy-${var.context.environment}"
+  placeholder_zip_path         = "${path.module}/artifacts/placeholder.zip"
+  handler                      = var.config.outlook_graph_renewal.handler
+  runtime                      = var.config.outlook_graph_renewal.runtime
+  architectures                = var.config.outlook_graph_renewal.architectures
+  memory_size                  = var.config.outlook_graph_renewal.memory_size
+  timeout                      = var.config.outlook_graph_renewal.timeout
+  environment_variables        = local.outlook_graph_renewal_environment_variables
+  log_retention_in_days        = var.config.outlook_graph_renewal.log_retention_in_days
+  environment                  = var.context.environment
+
+  lambda_execution_policy_path = "${path.module}/policies/db-ping-execution-policy.json"
+  enable_function_url          = false
+
+  enable_schedule              = true
+  schedule_name                = "${var.config.outlook_graph_renewal.function_name}-scheduler-${var.context.environment}"
+  scheduler_role_name          = "${var.config.outlook_graph_renewal.function_name}-scheduler-role-${var.context.environment}"
+  scheduler_policy_name        = "${var.config.outlook_graph_renewal.function_name}-scheduler-policy-${var.context.environment}"
+  schedule_description         = "Renew Microsoft Graph Outlook subscriptions and reconcile missed events"
+  schedule_expression          = var.config.outlook_graph_renewal.schedule.expression
+  schedule_timezone            = var.config.outlook_graph_renewal.schedule.timezone
+  schedule_state               = var.config.outlook_graph_renewal.schedule.state
+  schedule_input               = var.config.outlook_graph_renewal.schedule.input
+  maximum_event_age_in_seconds = var.config.outlook_graph_renewal.schedule.maximum_event_age_in_seconds
+  maximum_retry_attempts       = var.config.outlook_graph_renewal.schedule.maximum_retry_attempts
+
+  tags = merge(var.context.common_tags, var.config.outlook_graph_renewal.tags)
 }

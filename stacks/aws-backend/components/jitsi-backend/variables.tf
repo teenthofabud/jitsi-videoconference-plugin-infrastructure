@@ -34,8 +34,8 @@ variable "config" {
       }))
 
       spring_config = optional(object({
-          hikari_max_pool_size = number
-          hikari_min_idle_count = number
+        hikari_max_pool_size  = number
+        hikari_min_idle_count = number
       }))
     })
 
@@ -60,24 +60,60 @@ variable "config" {
       }))
     })
 
+    outlook_graph_renewal = object({
+      enable_renewal        = bool
+      function_name         = string
+      handler               = string
+      runtime               = string
+      architectures         = list(string)
+      memory_size           = number
+      timeout               = number
+      log_retention_in_days = number
+      tags                  = map(string)
+      schedule = object({
+        expression                   = string
+        timezone                     = string
+        state                        = string
+        input                        = string
+        maximum_event_age_in_seconds = number
+        maximum_retry_attempts       = number
+      })
+    })
+
     auth0 = object({
-      domain = string
+      domain         = string
       api_identifier = string
     })
 
     moderator_db_config = object({
       username = string
       password = string
-      db_name = string
-      host = string
-      port = string 
-      schema = string
+      db_name  = string
+      host     = string
+      port     = string
+      schema   = string
     })
 
     aiven_ping_db_config = object({
       username = string
       password = string
-      url = string 
+      url      = string
     })
   })
+}
+
+
+variable "outlook_graph_renewal_config" {
+  description = "Microsoft Graph application credentials and Outlook renewal settings."
+  type = object({
+    client_id            = string
+    client_secret        = string
+    tenant               = string
+    redirect_uri         = string
+    public_base_url      = string
+    token_encryption_key = string
+    scopes               = string
+  })
+  sensitive = true
+  default   = null
 }

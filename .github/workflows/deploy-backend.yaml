@@ -92,6 +92,34 @@ jobs:
           }
           EOF
 
+      - name: Get Outlook Graph secrets from Bitwarden
+        id: outlook_graph_secrets
+        uses: bitwarden/sm-action@v3.0.0
+        with:
+          cloud_region: ${{ vars.BITWARDEN_CLOUD_REGION }}
+          access_token: ${{ secrets.BITWARDEN_MACHINE_ACCOUNT_TOAB_JITSI_INFRASTRUCTURE_ACCESS_TOKEN_GITHUB_ACTIONS }}
+          secrets: |
+            ${{ vars.BITWARDEN_UUID_OUTLOOK_GRAPH_CLIENT_ID }} > OUTLOOK_GRAPH_CLIENT_ID
+            ${{ vars.BITWARDEN_UUID_OUTLOOK_GRAPH_CLIENT_SECRET }} > OUTLOOK_GRAPH_CLIENT_SECRET
+            ${{ vars.BITWARDEN_UUID_OUTLOOK_GRAPH_TOKEN_ENCRYPTION_KEY }} > OUTLOOK_GRAPH_TOKEN_ENCRYPTION_KEY
+          set_env: true
+
+      - name: Generate Outlook Graph renewal variables
+        run: |
+          cat << EOF > stacks/aws-backend/outlook-graph-renewal.auto.tfvars.json
+          {
+            "outlook_graph_renewal_config": {
+              "client_id": "${{ env.OUTLOOK_GRAPH_CLIENT_ID }}",
+              "client_secret": "${{ env.OUTLOOK_GRAPH_CLIENT_SECRET }}",
+              "tenant": "${{ vars.OUTLOOK_GRAPH_TENANT }}",
+              "redirect_uri": "${{ vars.OUTLOOK_GRAPH_REDIRECT_URI }}",
+              "public_base_url": "${{ vars.OUTLOOK_GRAPH_PUBLIC_BASE_URL }}",
+              "token_encryption_key": "${{ env.OUTLOOK_GRAPH_TOKEN_ENCRYPTION_KEY }}",
+              "scopes": "${{ vars.OUTLOOK_GRAPH_SCOPES }}"
+            }
+          }
+          EOF
+
       # AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
